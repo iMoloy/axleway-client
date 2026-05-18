@@ -43,7 +43,7 @@ export default function HomePage() {
               <Link className="primary-button" href="/cars">
                 Explore Cars
               </Link>
-              <Link className="primary-button bg-[#1f2933] hover:bg-[#111827]" href="/add-car">
+              <Link className="primary-button secondary-button" href="/add-car">
                 Add Car
               </Link>
             </div>
@@ -58,7 +58,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-[var(--line)] bg-white py-14">
+      <section className="border-y border-[var(--line)] bg-[var(--panel)] py-14">
         <div className="container">
           <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
@@ -93,4 +93,3 @@ export default function HomePage() {
     </>
   );
 }
-

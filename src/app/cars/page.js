@@ -7,10 +7,9 @@ export default function CarsPage() {
           Search, filter, and database car cards will be added in the explore cars section.
         </p>
       </div>
-      <div className="rounded-lg border border-dashed border-[var(--line)] bg-white p-8 text-center text-[var(--muted)]">
+      <div className="rounded-lg border border-dashed border-[var(--line)] bg-[var(--panel)] p-8 text-center text-[var(--muted)]">
         Car grid coming in the Explore Cars commit.
       </div>
     </section>
   );
 }
-

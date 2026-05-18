@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="border-t border-[var(--line)] bg-[#17211b] py-10 text-white">
+    <footer className="border-t border-[var(--line)] bg-[var(--ink)] py-10 text-white">
       <div className="container grid gap-8 md:grid-cols-3">
         <div>
           <h2 className="text-xl font-black">AxleWay</h2>
@@ -21,4 +21,3 @@ export function Footer() {
     </footer>
   );
 }
-

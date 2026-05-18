@@ -10,7 +10,7 @@ import { syncAuthCookie } from "@/lib/authApi";
 import { auth, googleProvider } from "@/lib/firebase";
 
 const inputClass =
-  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function LoginPage() {
@@ -75,7 +75,7 @@ export default function LoginPage() {
 
   return (
     <section className="container grid min-h-[72vh] place-items-center py-12">
-      <div className="w-full max-w-md rounded-lg border border-[var(--line)] bg-white p-6 shadow-sm">
+      <div className="w-full max-w-md rounded-lg border border-[var(--line)] bg-[var(--panel)] p-6 shadow-sm">
         <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
           Welcome back
         </p>

@@ -12,8 +12,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <AppProviders>
           <div className="page-shell">
             <Navbar />
@@ -26,4 +26,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-

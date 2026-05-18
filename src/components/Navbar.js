@@ -15,7 +15,7 @@ export function Navbar() {
   const { user, logOut } = useAuth();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--panel)]/90 backdrop-blur">
       <div className="container flex min-h-16 items-center justify-between gap-4">
         <Link className="text-xl font-black text-[var(--accent)]" href="/">
           AxleWay
@@ -47,4 +47,3 @@ export function Navbar() {
     </header>
   );
 }
-

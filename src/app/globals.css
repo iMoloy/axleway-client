@@ -1,13 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f7f2;
-  --foreground: #17211b;
-  --panel: #ffffff;
-  --muted: #65726a;
-  --accent: #0e7c66;
-  --accent-dark: #095747;
-  --line: #dfe5dc;
+  --background: #fffaf0;
+  --foreground: #233d4d;
+  --panel: #fffefd;
+  --panel-soft: #edf4e6;
+  --muted: #66757d;
+  --accent: #579c87;
+  --accent-dark: #386f62;
+  --accent-soft: #e2f1ea;
+  --action: #fe7f2d;
+  --action-dark: #c95f17;
+  --highlight: #fcca46;
+  --fresh: #a1c181;
+  --ink: #233d4d;
+  --line: #e5ddcb;
 }
 
 * {
@@ -16,7 +23,10 @@
 
 body {
   margin: 0;
-  background: var(--background);
+  background:
+    linear-gradient(180deg, rgba(252, 202, 70, 0.2), transparent 250px),
+    linear-gradient(135deg, rgba(87, 156, 135, 0.14), transparent 430px),
+    var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -51,13 +61,20 @@ a {
   min-height: 44px;
   padding: 0 18px;
   border-radius: 8px;
-  background: var(--accent);
+  background: var(--action);
   color: white;
   font-weight: 700;
   transition: 160ms ease;
 }
 
 .primary-button:hover {
-  background: var(--accent-dark);
+  background: var(--action-dark);
 }
 
+.secondary-button {
+  background: var(--ink);
+}
+
+.secondary-button:hover {
+  background: var(--accent-dark);
+}
