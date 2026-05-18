@@ -19,16 +19,23 @@ const userLinks = [
 export function Navbar() {
   const { user, logOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = async () => {
     setMenuOpen(false);
+    setMobileOpen(false);
     await logOut();
+  };
+
+  const closeMenus = () => {
+    setMenuOpen(false);
+    setMobileOpen(false);
   };
 
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--panel)]/90 backdrop-blur">
-      <div className="container flex min-h-16 items-center justify-between gap-4">
-        <Link className="text-xl font-black text-[var(--accent)]" href="/">
+      <div className="container flex min-h-16 items-center justify-between gap-3">
+        <Link className="text-xl font-black text-[var(--accent)]" href="/" onClick={closeMenus}>
           AxleWay
         </Link>
         <nav className="hidden items-center gap-5 text-sm font-semibold md:flex">
@@ -39,6 +46,14 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          <button
+            className="grid h-10 w-10 place-items-center rounded-lg border border-[var(--line)] bg-[var(--panel)] text-lg font-black md:hidden"
+            type="button"
+            aria-label="Toggle navigation menu"
+            onClick={() => setMobileOpen((current) => !current)}
+          >
+            {mobileOpen ? "x" : "="}
+          </button>
           {user ? (
             <div className="relative">
               <button
@@ -63,6 +78,16 @@ export function Navbar() {
                   <p className="border-b border-[var(--line)] px-3 py-2 text-xs font-semibold text-[var(--muted)]">
                     {user.email}
                   </p>
+                  {navLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      className="block rounded-md px-3 py-2 text-sm font-semibold hover:bg-[var(--accent-soft)] md:hidden"
+                      href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                   {userLinks.map((item) => (
                     <Link
                       key={item.href}
@@ -95,6 +120,54 @@ export function Navbar() {
           )}
         </div>
       </div>
+
+      {mobileOpen ? (
+        <div className="border-t border-[var(--line)] bg-[var(--panel)] md:hidden">
+          <nav className="container grid gap-2 py-4 text-sm font-bold">
+            {navLinks.map((item) => (
+              <Link
+                key={item.href}
+                className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)]"
+                href={item.href}
+                onClick={closeMenus}
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            {user ? (
+              <>
+                {userLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)]"
+                    href={item.href}
+                    onClick={closeMenus}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <button
+                  className="rounded-lg px-3 py-3 text-left font-bold text-red-600 hover:bg-red-50"
+                  type="button"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <div className="grid gap-2 pt-2">
+                <Link className="primary-button secondary-button w-full" href="/login" onClick={closeMenus}>
+                  Login
+                </Link>
+                <Link className="primary-button w-full" href="/register" onClick={closeMenus}>
+                  Register
+                </Link>
+              </div>
+            )}
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 }
