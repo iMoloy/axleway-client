@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
-const cars = [
+const demoCars = [
   {
     id: "aero-sedan",
     name: "Aero Sedan",
@@ -73,13 +74,50 @@ const controlClass =
   "h-12 rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 text-sm font-semibold text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 
 export default function CarsPage() {
+  const [cars, setCars] = useState(demoCars);
   const [search, setSearch] = useState("");
   const [type, setType] = useState("All");
   const [availability, setAvailability] = useState("All");
+  const [loading, setLoading] = useState(false);
+  const [usingDemoData, setUsingDemoData] = useState(true);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadCars() {
+      const query = new URLSearchParams();
+      if (search) query.set("search", search);
+      if (type !== "All") query.set("type", type);
+
+      try {
+        setLoading(true);
+        const data = await apiFetch(`/cars?${query.toString()}`);
+        if (!ignore) {
+          setCars(Array.isArray(data) ? data : []);
+          setUsingDemoData(false);
+        }
+      } catch {
+        if (!ignore) {
+          setCars(demoCars);
+          setUsingDemoData(true);
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadCars();
+
+    return () => {
+      ignore = true;
+    };
+  }, [search, type]);
 
   const filteredCars = useMemo(() => {
     return cars.filter((car) => {
-      const matchesSearch = car.name.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch = car.name?.toLowerCase().includes(search.toLowerCase());
       const matchesType = type === "All" || car.type === type;
       const matchesAvailability = availability === "All" || car.availability === availability;
 
@@ -99,9 +137,16 @@ export default function CarsPage() {
             Search by car name and filter by type or availability before opening the details page.
           </p>
         </div>
-        <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
-          {filteredCars.length} cars found
-        </p>
+        <div className="flex flex-wrap gap-2">
+          {usingDemoData ? (
+            <p className="rounded-lg bg-[var(--highlight)] px-4 py-2 text-sm font-bold text-[var(--ink)]">
+              Demo fleet
+            </p>
+          ) : null}
+          <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
+            {loading ? "Loading cars" : `${filteredCars.length} cars found`}
+          </p>
+        </div>
       </div>
 
       <div className="mb-8 grid gap-3 rounded-lg border border-[var(--line)] bg-[var(--panel)] p-4 md:grid-cols-[1fr_190px_190px]">
@@ -136,7 +181,7 @@ export default function CarsPage() {
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {filteredCars.map((car) => (
             <article
-              key={car.id}
+              key={car._id || car.id}
               className="flex h-full flex-col overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm"
             >
               <img className="h-52 w-full object-cover" src={car.image} alt={car.name} />
@@ -161,7 +206,7 @@ export default function CarsPage() {
                     <span className="font-semibold text-[var(--muted)]">Rent</span>
                     <span className="text-lg font-black text-[var(--action)]">${car.price}/day</span>
                   </div>
-                  <Link className="primary-button w-full" href={`/cars/${car.id}`}>
+                  <Link className="primary-button w-full" href={`/cars/${car._id || car.id}`}>
                     View Details
                   </Link>
                 </div>
