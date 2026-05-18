@@ -1,13 +1,11 @@
+import { apiFetch } from "./api";
+
 export async function syncAuthCookie(user) {
   if (!user) return false;
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/token`, {
+    await apiFetch("/auth/token", {
       method: "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      credentials: "include",
       body: JSON.stringify({
         name: user.displayName,
         email: user.email,
@@ -15,7 +13,7 @@ export async function syncAuthCookie(user) {
       })
     });
 
-    return response.ok;
+    return true;
   } catch {
     return false;
   }

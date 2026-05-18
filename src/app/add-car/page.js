@@ -2,7 +2,9 @@
 
 import { PrivateRoute } from "@/components/PrivateRoute";
 import { Button } from "@heroui/react";
+import { useState } from "react";
 import { toast } from "react-toastify";
+import { apiFetch } from "@/lib/api";
 
 const carTypes = ["SUV", "Sedan", "Hatchback", "Luxury", "Electric", "Microbus"];
 
@@ -13,9 +15,37 @@ const textareaClass =
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function AddCarPage() {
-  const handleSubmit = (event) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    toast.info("Car form is ready. API connection comes next.");
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const car = {
+      name: formData.get("name"),
+      price: Number(formData.get("price")),
+      type: formData.get("type"),
+      image: formData.get("image"),
+      seats: Number(formData.get("seats")),
+      location: formData.get("location"),
+      availability: formData.get("availability"),
+      description: formData.get("description")
+    };
+
+    try {
+      setLoading(true);
+      await apiFetch("/cars", {
+        method: "POST",
+        body: JSON.stringify(car)
+      });
+      toast.success("Car added successfully");
+      form.reset();
+    } catch (error) {
+      toast.error(error.message || "Could not add car");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -102,7 +132,7 @@ export default function AddCarPage() {
             <Button className="font-bold" type="reset" variant="bordered">
               Clear Form
             </Button>
-            <Button className="font-bold" color="primary" type="submit">
+            <Button className="font-bold" color="primary" isLoading={loading} type="submit">
               Add Car
             </Button>
           </div>
