@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import { auth } from "@/lib/firebase";
+import { syncAuthCookie } from "@/lib/authApi";
 
 const AuthContext = createContext(null);
 
@@ -19,6 +20,9 @@ export function AuthProvider({ children }) {
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        await syncAuthCookie(currentUser);
+      }
       setLoading(false);
     });
 
