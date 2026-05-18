@@ -1,18 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "@/providers/AuthProvider";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/cars", label: "Explore Cars" },
+  { href: "/cars", label: "Explore Cars" }
+];
+
+const userLinks = [
   { href: "/add-car", label: "Add Car" },
-  { href: "/my-bookings", label: "My Bookings" }
+  { href: "/my-bookings", label: "My Bookings" },
+  { href: "/my-added-cars", label: "My Added Cars" }
 ];
 
 export function Navbar() {
   const { user, logOut } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    setMenuOpen(false);
+    await logOut();
+  };
 
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--panel)]/90 backdrop-blur">
@@ -29,18 +40,58 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-3">
           {user ? (
-            <>
-              <span className="hidden max-w-36 truncate text-sm font-semibold sm:block">
-                {user.displayName || user.email}
-              </span>
-              <Button color="danger" size="sm" variant="flat" onPress={logOut}>
-                Logout
-              </Button>
-            </>
+            <div className="relative">
+              <button
+                className="flex h-10 items-center gap-2 rounded-lg border border-[var(--line)] bg-[var(--panel)] px-2 text-left transition hover:border-[var(--accent)]"
+                type="button"
+                onClick={() => setMenuOpen((current) => !current)}
+              >
+                <span className="grid h-7 w-7 place-items-center overflow-hidden rounded-full bg-[var(--accent-soft)] text-xs font-black text-[var(--accent-dark)]">
+                  {user.photoURL ? (
+                    <img className="h-full w-full object-cover" src={user.photoURL} alt={user.displayName || user.email} />
+                  ) : (
+                    (user.displayName || user.email || "U").slice(0, 1).toUpperCase()
+                  )}
+                </span>
+                <span className="hidden max-w-32 truncate text-sm font-bold sm:block">
+                  {user.displayName || user.email}
+                </span>
+              </button>
+
+              {menuOpen ? (
+                <div className="absolute right-0 mt-3 w-56 rounded-lg border border-[var(--line)] bg-[var(--panel)] p-2 shadow-xl">
+                  <p className="border-b border-[var(--line)] px-3 py-2 text-xs font-semibold text-[var(--muted)]">
+                    {user.email}
+                  </p>
+                  {userLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      className="block rounded-md px-3 py-2 text-sm font-semibold hover:bg-[var(--accent-soft)]"
+                      href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                  <button
+                    className="mt-1 w-full rounded-md px-3 py-2 text-left text-sm font-bold text-red-600 hover:bg-red-50"
+                    type="button"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : null}
+            </div>
           ) : (
-            <Button as={Link} color="primary" href="/login" size="sm">
-              Login
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button as={Link} href="/login" size="sm" variant="flat">
+                Login
+              </Button>
+              <Button as={Link} color="primary" href="/register" size="sm">
+                Register
+              </Button>
+            </div>
           )}
         </div>
       </div>
