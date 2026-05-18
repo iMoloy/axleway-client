@@ -3,11 +3,17 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button, Input } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
 import { syncAuthCookie } from "@/lib/authApi";
 import { auth, googleProvider } from "@/lib/firebase";
+
+const inputClass =
+  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+const errorInputClass =
+  "mt-2 h-12 w-full rounded-lg border border-red-500 bg-white px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20";
+const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 function getPasswordError(password) {
   if (password.length < 6) return "Password must be at least 6 characters.";
@@ -20,6 +26,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -86,35 +93,61 @@ export default function RegisterPage() {
           Start driving
         </p>
         <h1 className="mt-2 text-3xl font-bold">Create your account</h1>
-        <form className="mt-6 space-y-4" onSubmit={handleRegister}>
-          <Input isRequired label="Name" name="name" placeholder="Your name" variant="bordered" />
-          <Input
-            isRequired
-            label="Email"
-            name="email"
-            placeholder="you@example.com"
-            type="email"
-            variant="bordered"
-          />
-          <Input
-            isRequired
-            label="Photo URL"
-            name="photoURL"
-            placeholder="https://example.com/photo.jpg"
-            type="url"
-            variant="bordered"
-          />
-          <Input
-            isInvalid={Boolean(passwordError)}
-            isRequired
-            errorMessage={passwordError}
-            label="Password"
-            name="password"
-            placeholder="Use uppercase, lowercase, 6+ chars"
-            type="password"
-            variant="bordered"
-            onValueChange={(value) => setPasswordError(getPasswordError(value))}
-          />
+        <form className="mt-6 space-y-5" onSubmit={handleRegister}>
+          <label className={labelClass}>
+            Name
+            <input
+              required
+              autoComplete="name"
+              className={inputClass}
+              name="name"
+              placeholder="Your name"
+              type="text"
+            />
+          </label>
+          <label className={labelClass}>
+            Email
+            <input
+              required
+              autoComplete="email"
+              className={inputClass}
+              name="email"
+              placeholder="you@example.com"
+              type="email"
+            />
+          </label>
+          <label className={labelClass}>
+            Photo URL
+            <input
+              required
+              autoComplete="url"
+              className={inputClass}
+              name="photoURL"
+              placeholder="https://example.com/photo.jpg"
+              type="url"
+            />
+          </label>
+          <label className={labelClass}>
+            Password
+            <input
+              required
+              autoComplete="new-password"
+              className={passwordTouched && passwordError ? errorInputClass : inputClass}
+              name="password"
+              placeholder="Use uppercase, lowercase, 6+ chars"
+              type="password"
+              onBlur={() => setPasswordTouched(true)}
+              onChange={(event) => {
+                setPasswordTouched(true);
+                setPasswordError(getPasswordError(event.target.value));
+              }}
+            />
+            {passwordTouched && passwordError ? (
+              <span className="mt-2 block text-xs font-semibold text-red-600">
+                {passwordError}
+              </span>
+            ) : null}
+          </label>
           <Button className="w-full font-bold" color="primary" isLoading={loading} type="submit">
             Register
           </Button>

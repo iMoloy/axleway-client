@@ -3,11 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button, Input } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { toast } from "react-toastify";
 import { syncAuthCookie } from "@/lib/authApi";
 import { auth, googleProvider } from "@/lib/firebase";
+
+const inputClass =
+  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -76,23 +80,29 @@ export default function LoginPage() {
           Welcome back
         </p>
         <h1 className="mt-2 text-3xl font-bold">Login to AxleWay</h1>
-        <form className="mt-6 space-y-4" onSubmit={handleLogin}>
-          <Input
-            isRequired
-            label="Email"
-            name="email"
-            placeholder="you@example.com"
-            type="email"
-            variant="bordered"
-          />
-          <Input
-            isRequired
-            label="Password"
-            name="password"
-            placeholder="Enter your password"
-            type="password"
-            variant="bordered"
-          />
+        <form className="mt-6 space-y-5" onSubmit={handleLogin}>
+          <label className={labelClass}>
+            Email
+            <input
+              required
+              autoComplete="email"
+              className={inputClass}
+              name="email"
+              placeholder="you@example.com"
+              type="email"
+            />
+          </label>
+          <label className={labelClass}>
+            Password
+            <input
+              required
+              autoComplete="current-password"
+              className={inputClass}
+              name="password"
+              placeholder="Enter your password"
+              type="password"
+            />
+          </label>
           <Button className="w-full font-bold" color="primary" isLoading={loading} type="submit">
             Login
           </Button>
