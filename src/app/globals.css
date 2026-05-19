@@ -28,7 +28,7 @@ body {
     linear-gradient(135deg, rgba(87, 156, 135, 0.14), transparent 430px),
     var(--background);
   color: var(--foreground);
-  font-family: "Pilcrow Rounded", Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
 a {
@@ -45,7 +45,7 @@ h6,
 button,
 .section-title,
 .primary-button {
-  font-family: "Roundo", "Pilcrow Rounded", Arial, Helvetica, sans-serif;
+  font-family: var(--font-outfit), Arial, Helvetica, sans-serif;
 }
 
 .page-shell {
