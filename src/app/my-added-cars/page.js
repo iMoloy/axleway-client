@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
+import { useAuth } from "@/providers/AuthProvider";
+import { apiFetch } from "@/lib/api";
 
-const ownerCars = [
+const demoOwnerCars = [
   {
     id: "metro-suv",
     name: "Metro SUV",
@@ -35,18 +37,112 @@ const textareaClass =
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function MyAddedCarsPage() {
+  const { user, loading: authLoading } = useAuth();
+  const [ownerCars, setOwnerCars] = useState(demoOwnerCars);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [usingDemoData, setUsingDemoData] = useState(true);
   const [editCar, setEditCar] = useState(null);
   const [deleteCar, setDeleteCar] = useState(null);
 
-  const handleUpdate = (event) => {
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadOwnerCars() {
+      if (!user?.email) return;
+
+      try {
+        setLoading(true);
+        const data = await apiFetch(`/cars/owner/${user.email}`);
+        if (!ignore) {
+          setOwnerCars(Array.isArray(data) ? data : []);
+          setUsingDemoData(false);
+        }
+      } catch {
+        if (!ignore) {
+          setOwnerCars(demoOwnerCars);
+          setUsingDemoData(true);
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    if (!authLoading) {
+      loadOwnerCars();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, [authLoading, user?.email]);
+
+  const handleUpdate = async (event) => {
     event.preventDefault();
-    toast.info("Update form is ready. Owner API connection comes next.");
-    setEditCar(null);
+    const formData = new FormData(event.currentTarget);
+    const carId = editCar?._id || editCar?.id;
+
+    const updates = {
+      price: Number(formData.get("price")),
+      type: formData.get("type"),
+      availability: formData.get("availability"),
+      location: formData.get("location"),
+      image: formData.get("image"),
+      description: formData.get("description")
+    };
+
+    if (usingDemoData || !editCar?._id) {
+      setOwnerCars((current) =>
+        current.map((car) => (car.id === carId ? { ...car, ...updates } : car))
+      );
+      toast.info("Demo listing updated locally. Server update works after API data loads.");
+      setEditCar(null);
+      return;
+    }
+
+    try {
+      setSaving(true);
+      await apiFetch(`/cars/${editCar._id}`, {
+        method: "PATCH",
+        body: JSON.stringify(updates)
+      });
+      setOwnerCars((current) =>
+        current.map((car) => (car._id === editCar._id ? { ...car, ...updates } : car))
+      );
+      toast.success("Car updated successfully");
+      setEditCar(null);
+    } catch (error) {
+      toast.error(error.message || "Could not update car");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDelete = () => {
-    toast.info("Delete confirmation is ready. Delete API connection comes next.");
-    setDeleteCar(null);
+  const handleDelete = async () => {
+    const carId = deleteCar?._id || deleteCar?.id;
+
+    if (usingDemoData || !deleteCar?._id) {
+      setOwnerCars((current) => current.filter((car) => car.id !== carId));
+      toast.info("Demo listing removed locally. Server delete works after API data loads.");
+      setDeleteCar(null);
+      return;
+    }
+
+    try {
+      setSaving(true);
+      await apiFetch(`/cars/${deleteCar._id}`, {
+        method: "DELETE"
+      });
+      setOwnerCars((current) => current.filter((car) => car._id !== deleteCar._id));
+      toast.success("Car deleted successfully");
+      setDeleteCar(null);
+    } catch (error) {
+      toast.error(error.message || "Could not delete car");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -62,15 +158,23 @@ export default function MyAddedCarsPage() {
               Review your listed cars and keep price, availability, location, and descriptions up to date.
             </p>
           </div>
-          <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
-            {ownerCars.length} active listings
-          </p>
+          <div className="flex flex-wrap gap-2">
+            {usingDemoData ? (
+              <p className="rounded-lg bg-[var(--highlight)] px-4 py-2 text-sm font-bold text-[var(--ink)]">
+                Demo listings
+              </p>
+            ) : null}
+            <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
+              {loading ? "Loading listings" : `${ownerCars.length} active listings`}
+            </p>
+          </div>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-2">
+        {ownerCars.length ? (
+          <div className="grid gap-5 lg:grid-cols-2">
           {ownerCars.map((car) => (
             <article
-              key={car.id}
+              key={car._id || car.id}
               className="grid overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm sm:grid-cols-[210px_1fr]"
             >
               <img className="h-56 w-full object-cover sm:h-full" src={car.image} alt={car.name} />
@@ -104,6 +208,11 @@ export default function MyAddedCarsPage() {
             </article>
           ))}
         </div>
+        ) : (
+          <div className="rounded-lg border border-dashed border-[var(--line)] bg-[var(--panel)] p-8 text-center text-[var(--muted)]">
+            You have not added any cars yet.
+          </div>
+        )}
 
         {editCar ? (
           <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
@@ -158,7 +267,7 @@ export default function MyAddedCarsPage() {
                 <Button type="button" variant="bordered" onPress={() => setEditCar(null)}>
                   Cancel
                 </Button>
-                <Button color="primary" type="submit">
+                <Button color="primary" isLoading={saving} type="submit">
                   Save Changes
                 </Button>
               </div>
@@ -177,7 +286,7 @@ export default function MyAddedCarsPage() {
                 <Button variant="bordered" onPress={() => setDeleteCar(null)}>
                   Cancel
                 </Button>
-                <Button color="danger" onPress={handleDelete}>
+                <Button color="danger" isLoading={saving} onPress={handleDelete}>
                   Delete Car
                 </Button>
               </div>
