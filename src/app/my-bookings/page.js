@@ -7,36 +7,10 @@ import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
 import { apiFetch } from "@/lib/api";
 
-const demoBookings = [
-  {
-    id: "booking-1",
-    carId: "metro-suv",
-    carName: "Metro SUV",
-    carType: "SUV",
-    totalPrice: 72,
-    bookingDate: "2026-05-18",
-    driverNeeded: "No",
-    status: "Confirmed",
-    note: "Pickup after 10 AM from Gulshan."
-  },
-  {
-    id: "booking-2",
-    carId: "summit-luxury",
-    carName: "Summit Luxury",
-    carType: "Luxury",
-    totalPrice: 110,
-    bookingDate: "2026-05-20",
-    driverNeeded: "Yes",
-    status: "Pending",
-    note: "Need driver for airport transfer."
-  }
-];
-
 export default function MyBookingsPage() {
-  const [bookings, setBookings] = useState(demoBookings);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [canceling, setCanceling] = useState(false);
-  const [usingDemoData, setUsingDemoData] = useState(true);
   const [cancelBooking, setCancelBooking] = useState(null);
 
   useEffect(() => {
@@ -48,12 +22,10 @@ export default function MyBookingsPage() {
         const data = await apiFetch("/bookings");
         if (!ignore) {
           setBookings(Array.isArray(data) ? data : []);
-          setUsingDemoData(false);
         }
       } catch {
         if (!ignore) {
-          setBookings(demoBookings);
-          setUsingDemoData(true);
+          setBookings([]);
         }
       } finally {
         if (!ignore) {
@@ -72,9 +44,8 @@ export default function MyBookingsPage() {
   const handleCancel = async () => {
     const bookingId = cancelBooking?._id || cancelBooking?.id;
 
-    if (usingDemoData || !cancelBooking?._id) {
-      setBookings((current) => current.filter((booking) => booking.id !== bookingId));
-      toast.info("Demo booking removed locally. Server cancel works after API data loads.");
+    if (!cancelBooking?._id) {
+      toast.error("Invalid booking selection");
       setCancelBooking(null);
       return;
     }
@@ -108,11 +79,6 @@ export default function MyBookingsPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {usingDemoData ? (
-              <p className="rounded-lg bg-[var(--highlight)] px-4 py-2 text-sm font-bold text-[var(--ink)]">
-                Demo bookings
-              </p>
-            ) : null}
             <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
               {loading ? "Loading bookings" : `${bookings.length} bookings`}
             </p>

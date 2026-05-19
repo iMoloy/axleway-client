@@ -7,29 +7,6 @@ import { PrivateRoute } from "@/components/PrivateRoute";
 import { useAuth } from "@/providers/AuthProvider";
 import { apiFetch } from "@/lib/api";
 
-const demoOwnerCars = [
-  {
-    id: "metro-suv",
-    name: "Metro SUV",
-    type: "SUV",
-    price: 72,
-    location: "Gulshan",
-    availability: "Available",
-    image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=80",
-    description: "Roomy SUV for family and group travel."
-  },
-  {
-    id: "orbit-electric",
-    name: "Orbit Electric",
-    type: "Electric",
-    price: 62,
-    location: "Banani",
-    availability: "Available",
-    image: "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=900&q=80",
-    description: "Quiet electric ride for modern city routes."
-  }
-];
-
 const inputClass =
   "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 const textareaClass =
@@ -38,10 +15,9 @@ const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function MyAddedCarsPage() {
   const { user, loading: authLoading } = useAuth();
-  const [ownerCars, setOwnerCars] = useState(demoOwnerCars);
+  const [ownerCars, setOwnerCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [usingDemoData, setUsingDemoData] = useState(true);
   const [editCar, setEditCar] = useState(null);
   const [deleteCar, setDeleteCar] = useState(null);
 
@@ -56,12 +32,10 @@ export default function MyAddedCarsPage() {
         const data = await apiFetch(`/cars/owner/${user.email}`);
         if (!ignore) {
           setOwnerCars(Array.isArray(data) ? data : []);
-          setUsingDemoData(false);
         }
       } catch {
         if (!ignore) {
-          setOwnerCars(demoOwnerCars);
-          setUsingDemoData(true);
+          setOwnerCars([]);
         }
       } finally {
         if (!ignore) {
@@ -93,11 +67,8 @@ export default function MyAddedCarsPage() {
       description: formData.get("description")
     };
 
-    if (usingDemoData || !editCar?._id) {
-      setOwnerCars((current) =>
-        current.map((car) => (car.id === carId ? { ...car, ...updates } : car))
-      );
-      toast.info("Demo listing updated locally. Server update works after API data loads.");
+    if (!editCar?._id) {
+      toast.error("Invalid car selection");
       setEditCar(null);
       return;
     }
@@ -123,9 +94,8 @@ export default function MyAddedCarsPage() {
   const handleDelete = async () => {
     const carId = deleteCar?._id || deleteCar?.id;
 
-    if (usingDemoData || !deleteCar?._id) {
-      setOwnerCars((current) => current.filter((car) => car.id !== carId));
-      toast.info("Demo listing removed locally. Server delete works after API data loads.");
+    if (!deleteCar?._id) {
+      toast.error("Invalid car selection");
       setDeleteCar(null);
       return;
     }
@@ -159,11 +129,6 @@ export default function MyAddedCarsPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {usingDemoData ? (
-              <p className="rounded-lg bg-[var(--highlight)] px-4 py-2 text-sm font-bold text-[var(--ink)]">
-                Demo listings
-              </p>
-            ) : null}
             <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
               {loading ? "Loading listings" : `${ownerCars.length} active listings`}
             </p>
