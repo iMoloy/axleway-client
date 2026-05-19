@@ -27,11 +27,8 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-[var(--line)]">
-        {/* Subtle background glow */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(37,99,235,0.08),transparent)]" />
-
-        <div className="container relative py-20 md:py-28">
+      <section className="border-b border-[var(--line)]">
+        <div className="container py-20 md:py-28">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             {/* Left: Text content */}
             <div>
@@ -85,8 +82,7 @@ export default function HomePage() {
 
             {/* Right: Car image */}
             <div className="relative">
-              <div className="absolute -inset-4 rounded-3xl bg-[var(--accent-soft)] opacity-50 blur-3xl" />
-              <div className="relative overflow-hidden rounded-2xl border border-[var(--line)] bg-white p-2 shadow-2xl shadow-blue-100">
+              <div className="overflow-hidden rounded-2xl border border-[var(--line)] bg-white p-2 shadow-xl">
                 <img
                   className="h-[400px] w-full rounded-xl object-cover"
                   src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80"

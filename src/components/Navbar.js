@@ -100,73 +100,68 @@ export function Navbar() {
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <button
-                className="flex h-11 items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--panel)] py-1 pl-1 pr-3 text-left shadow-sm transition hover:border-[var(--accent)] hover:shadow-md"
+                className="flex items-center gap-2.5 rounded-full border border-[var(--line)] bg-white py-1.5 pl-1.5 pr-4 text-left transition hover:border-[var(--accent)] hover:shadow-md"
                 type="button"
                 onClick={() => setMenuOpen((current) => !current)}
               >
-                <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-[var(--accent-soft)] text-xs font-black text-[var(--accent-dark)]">
-                  {user.photoURL ? (
-                    <img className="h-full w-full object-cover" src={user.photoURL} alt={user.displayName || user.email} />
-                  ) : (
-                    (user.displayName || user.email || "U").slice(0, 1).toUpperCase()
-                  )}
-                </span>
-                <span className="hidden max-w-28 truncate text-sm font-bold text-[var(--foreground)] sm:block">
+                {/* Avatar with online dot */}
+                <div className="relative">
+                  <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-[var(--accent-soft)] text-xs font-black text-[var(--accent)]">
+                    {user.photoURL ? (
+                      <img className="h-full w-full object-cover" src={user.photoURL} alt={user.displayName || user.email} />
+                    ) : (
+                      (user.displayName || user.email || "U").slice(0, 1).toUpperCase()
+                    )}
+                  </span>
+                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-400" />
+                </div>
+                <span className="hidden max-w-28 truncate text-sm font-bold sm:block">
                   {user.displayName || user.email?.split("@")[0]}
                 </span>
-                <span className="text-xs text-[var(--muted)]">▼</span>
+                <span className="text-[10px] text-[var(--muted)]">▼</span>
               </button>
 
               {menuOpen ? (
-                <div className="absolute right-0 mt-3 w-64 origin-top-right rounded-xl border border-[var(--line)] bg-[var(--panel)] p-2 shadow-2xl transition-all">
-                  <div className="mb-2 border-b border-[var(--line)] px-3 pb-3 pt-2">
-                    <p className="truncate text-sm font-bold text-[var(--foreground)]">{user.displayName || "User"}</p>
-                    <p className="truncate text-xs font-medium text-[var(--muted)]">{user.email}</p>
+                <div className="absolute right-0 mt-2 w-56 rounded-xl border border-[var(--line)] bg-white p-1 shadow-lg">
+                  <div className="border-b border-[var(--line)] px-3 py-2 mb-1">
+                    <p className="truncate text-sm font-bold">{user.displayName || "User"}</p>
+                    <p className="truncate text-xs text-[var(--muted)]">{user.email}</p>
                   </div>
-                  
-                  {/* Mobile-only nav links inside dropdown */}
+
                   <div className="md:hidden">
-                    {navLinks.map((item) => (
+                    {[...navLinks, ...authNavLinks].map((item) => (
                       <Link
                         key={item.href}
-                        className="block rounded-lg px-3 py-2 text-sm font-semibold text-[var(--muted)] hover:bg-[var(--accent-soft)] hover:text-[var(--foreground)]"
+                        className="block rounded-lg px-3 py-2 text-sm font-medium text-[var(--foreground)] hover:bg-[var(--panel-soft)]"
                         href={item.href}
                         onClick={() => setMenuOpen(false)}
                       >
                         {item.label}
                       </Link>
                     ))}
-                    {authNavLinks.map((item) => (
-                      <Link
-                        key={item.href}
-                        className="block rounded-lg px-3 py-2 text-sm font-semibold text-[var(--muted)] hover:bg-[var(--accent-soft)] hover:text-[var(--foreground)]"
-                        href={item.href}
-                        onClick={() => setMenuOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                    <div className="my-1 border-t border-[var(--line)]"></div>
+                    <div className="my-1 border-t border-[var(--line)]" />
                   </div>
 
                   {dropdownLinks.map((item) => (
                     <Link
                       key={item.href}
-                      className="block rounded-lg px-3 py-2 text-sm font-semibold text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--foreground)]"
+                      className="block rounded-lg px-3 py-2 text-sm font-medium text-[var(--foreground)] hover:bg-[var(--panel-soft)]"
                       href={item.href}
                       onClick={() => setMenuOpen(false)}
                     >
                       {item.label}
                     </Link>
                   ))}
-                  
-                  <button
-                    className="mt-1 w-full rounded-lg px-3 py-2 text-left text-sm font-bold text-red-600 transition-colors hover:bg-red-50 hover:text-red-700"
-                    type="button"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
+
+                  <div className="mt-1 border-t border-[var(--line)] pt-1">
+                    <button
+                      className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50"
+                      type="button"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
               ) : null}
             </div>
