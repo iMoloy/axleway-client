@@ -5,6 +5,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import { auth } from "@/lib/firebase";
 import { syncAuthCookie } from "@/lib/authApi";
+import { apiFetch } from "@/lib/api";
 
 const AuthContext = createContext(null);
 
@@ -34,10 +35,7 @@ export function AuthProvider({ children }) {
       await signOut(auth);
     }
 
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-      method: "POST",
-      credentials: "include"
-    });
+    await apiFetch("/auth/logout", { method: "POST" }).catch(() => null);
     toast.success("Logged out successfully");
   };
 
