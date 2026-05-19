@@ -270,7 +270,7 @@ export default function CarsPage() {
 
       return matchesSearch && matchesType && matchesAvailability;
     });
-  }, [availability, search, type]);
+  }, [availability, search, type, cars]);
 
   const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
   const currentCars = filteredCars.slice(
