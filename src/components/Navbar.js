@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "@/providers/AuthProvider";
@@ -18,6 +19,7 @@ const userLinks = [
 
 export function Navbar() {
   const { user, logOut } = useAuth();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -110,12 +112,16 @@ export function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Button as={Link} href="/login" size="sm" variant="flat">
-                Login
-              </Button>
-              <Button as={Link} color="primary" href="/register" size="sm">
-                Register
-              </Button>
+              {pathname !== "/login" && (
+                <Button as={Link} color={pathname === "/register" ? "primary" : "default"} href="/login" size="sm" variant={pathname === "/register" ? "solid" : "flat"}>
+                  Login
+                </Button>
+              )}
+              {pathname !== "/register" && (
+                <Button as={Link} color="primary" href="/register" size="sm">
+                  Register
+                </Button>
+              )}
             </div>
           )}
         </div>
@@ -157,12 +163,16 @@ export function Navbar() {
               </>
             ) : (
               <div className="grid gap-2 pt-2">
-                <Link className="primary-button secondary-button w-full" href="/login" onClick={closeMenus}>
-                  Login
-                </Link>
-                <Link className="primary-button w-full" href="/register" onClick={closeMenus}>
-                  Register
-                </Link>
+                {pathname !== "/login" && (
+                  <Link className={`primary-button w-full ${pathname === "/register" ? "" : "secondary-button"}`} href="/login" onClick={closeMenus}>
+                    Login
+                  </Link>
+                )}
+                {pathname !== "/register" && (
+                  <Link className="primary-button w-full" href="/register" onClick={closeMenus}>
+                    Register
+                  </Link>
+                )}
               </div>
             )}
           </nav>
