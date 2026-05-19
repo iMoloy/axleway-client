@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
+import { apiFetch } from "@/lib/api";
 
-const bookings = [
+const demoBookings = [
   {
     id: "booking-1",
     carId: "metro-suv",
@@ -32,10 +33,43 @@ const bookings = [
 ];
 
 export default function MyBookingsPage() {
+  const [bookings, setBookings] = useState(demoBookings);
+  const [loading, setLoading] = useState(true);
+  const [usingDemoData, setUsingDemoData] = useState(true);
   const [cancelBooking, setCancelBooking] = useState(null);
 
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadBookings() {
+      try {
+        setLoading(true);
+        const data = await apiFetch("/bookings");
+        if (!ignore) {
+          setBookings(Array.isArray(data) ? data : []);
+          setUsingDemoData(false);
+        }
+      } catch {
+        if (!ignore) {
+          setBookings(demoBookings);
+          setUsingDemoData(true);
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadBookings();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   const handleCancel = () => {
-    toast.info("Cancel booking flow is ready. Booking API connection comes next.");
+    toast.info("Cancel booking API will be connected with delete/update booking support.");
     setCancelBooking(null);
   };
 
@@ -52,12 +86,20 @@ export default function MyBookingsPage() {
               Track booking dates, pricing, driver requests, and car details from one place.
             </p>
           </div>
-          <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
-            {bookings.length} bookings
-          </p>
+          <div className="flex flex-wrap gap-2">
+            {usingDemoData ? (
+              <p className="rounded-lg bg-[var(--highlight)] px-4 py-2 text-sm font-bold text-[var(--ink)]">
+                Demo bookings
+              </p>
+            ) : null}
+            <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
+              {loading ? "Loading bookings" : `${bookings.length} bookings`}
+            </p>
+          </div>
         </div>
 
-        <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm">
+        {bookings.length ? (
+          <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm">
           <div className="hidden grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr_0.8fr] gap-4 border-b border-[var(--line)] bg-[var(--panel-soft)] px-5 py-4 text-sm font-black md:grid">
             <span>Car</span>
             <span>Total Price</span>
@@ -69,7 +111,7 @@ export default function MyBookingsPage() {
           <div className="divide-y divide-[var(--line)]">
             {bookings.map((booking) => (
               <article
-                key={booking.id}
+                key={booking._id || booking.id}
                 className="grid gap-4 px-5 py-5 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr_0.8fr] md:items-center"
               >
                 <div>
@@ -94,7 +136,7 @@ export default function MyBookingsPage() {
                   <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--muted)] md:hidden">
                     Booking Date
                   </p>
-                  <p className="font-bold">{booking.bookingDate}</p>
+                  <p className="font-bold">{formatDate(booking.bookingDate)}</p>
                 </div>
 
                 <div>
@@ -116,6 +158,11 @@ export default function MyBookingsPage() {
             ))}
           </div>
         </div>
+        ) : (
+          <div className="rounded-lg border border-dashed border-[var(--line)] bg-[var(--panel)] p-8 text-center text-[var(--muted)]">
+            You do not have any bookings yet.
+          </div>
+        )}
 
         {cancelBooking ? (
           <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
@@ -138,4 +185,17 @@ export default function MyBookingsPage() {
       </section>
     </PrivateRoute>
   );
+}
+
+function formatDate(value) {
+  if (!value) return "Not set";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
 }
