@@ -72,6 +72,36 @@ export default function AddCarPage() {
     }
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await fetch("https://api.imgbb.com/1/upload?key=71f8541560b267adf2e51cd2cb15d14f", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        const urlInput = document.getElementById("carImageInput");
+        if (urlInput) urlInput.value = data.data.display_url;
+        toast.success("Image uploaded from local device!");
+      } else {
+        throw new Error(data.error?.message || "Upload failed");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+      e.target.value = "";
+    }
+  };
+
   return (
     <PrivateRoute>
       <section className="container py-12 md:py-16">
@@ -120,13 +150,26 @@ export default function AddCarPage() {
 
           <label className={labelClass}>
             Image URL
-            <input
-              required
-              className={inputClass}
-              name="image"
-              placeholder="https://example.com/car.jpg"
-              type="url"
-            />
+            <div className="mt-2 flex gap-2">
+              <input
+                id="carImageInput"
+                required
+                className={inputClass.replace("mt-2 ", "")}
+                name="image"
+                placeholder="https://example.com/car.jpg"
+                type="url"
+              />
+              <div className="relative flex w-36 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[var(--line)] bg-[var(--panel-soft)] font-bold text-[var(--muted)] transition hover:bg-[var(--line)]">
+                <span className="text-xs">Upload File</span>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="absolute inset-0 cursor-pointer opacity-0"
+                  onChange={handleImageUpload}
+                  disabled={loading}
+                />
+              </div>
+            </div>
           </label>
 
           <label className={labelClass}>

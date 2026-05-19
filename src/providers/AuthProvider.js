@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
 import { auth } from "@/lib/firebase";
 import { syncAuthCookie } from "@/lib/authApi";
@@ -39,8 +39,15 @@ export function AuthProvider({ children }) {
     toast.success("Logged out successfully");
   };
 
+  const updateUserProfile = async (displayName, photoURL) => {
+    if (auth?.currentUser) {
+      await updateProfile(auth.currentUser, { displayName, photoURL });
+      setUser({ ...auth.currentUser, displayName, photoURL });
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, logOut }}>
+    <AuthContext.Provider value={{ user, loading, logOut, updateUserProfile }}>
       {children}
     </AuthContext.Provider>
   );

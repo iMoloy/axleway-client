@@ -12,6 +12,7 @@ const navLinks = [
 ];
 
 const userLinks = [
+  { href: "/my-profile", label: "My Profile" },
   { href: "/add-car", label: "Add Car" },
   { href: "/my-bookings", label: "My Bookings" },
   { href: "/my-added-cars", label: "My Added Cars" }
