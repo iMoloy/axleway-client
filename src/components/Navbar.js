@@ -112,14 +112,13 @@ export function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              {pathname !== "/login" && (
-                <Button as={Link} color={pathname === "/register" ? "primary" : "default"} href="/login" size="sm" variant={pathname === "/register" ? "solid" : "flat"}>
-                  Login
-                </Button>
-              )}
-              {pathname !== "/register" && (
+              {pathname === "/login" ? (
                 <Button as={Link} color="primary" href="/register" size="sm">
                   Register
+                </Button>
+              ) : (
+                <Button as={Link} color="primary" href="/login" size="sm" variant="flat">
+                  Login
                 </Button>
               )}
             </div>
@@ -163,14 +162,13 @@ export function Navbar() {
               </>
             ) : (
               <div className="grid gap-2 pt-2">
-                {pathname !== "/login" && (
-                  <Link className={`primary-button w-full ${pathname === "/register" ? "" : "secondary-button"}`} href="/login" onClick={closeMenus}>
-                    Login
-                  </Link>
-                )}
-                {pathname !== "/register" && (
+                {pathname === "/login" ? (
                   <Link className="primary-button w-full" href="/register" onClick={closeMenus}>
                     Register
+                  </Link>
+                ) : (
+                  <Link className="primary-button secondary-button w-full" href="/login" onClick={closeMenus}>
+                    Login
                   </Link>
                 )}
               </div>
