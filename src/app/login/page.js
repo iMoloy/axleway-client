@@ -9,7 +9,7 @@ import { syncAuthCookie } from "@/lib/authApi";
 import { auth, googleProvider } from "@/lib/firebase";
 
 const inputClass =
-  "mt-1.5 h-12 w-full rounded-xl border border-[var(--line)] bg-[var(--panel-soft)] px-4 text-sm outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:bg-white focus:ring-2 focus:ring-[var(--accent)]/15";
+  "mt-1.5 h-12 w-full rounded-md border border-[var(--line)] bg-[var(--panel-soft)] px-4 text-sm outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:bg-white focus:ring-2 focus:ring-[var(--accent)]/15";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,7 +22,11 @@ export default function LoginPage() {
     const form = e.currentTarget;
     try {
       setLoading(true);
-      const result = await signInWithEmailAndPassword(auth, form.email.value, form.password.value);
+      const result = await signInWithEmailAndPassword(
+        auth,
+        form.email.value,
+        form.password.value,
+      );
       const ok = await syncAuthCookie(result.user);
       if (!ok) toast.warning("Logged in, but server token is not ready yet.");
       else toast.success("Login successful");
@@ -44,6 +48,7 @@ export default function LoginPage() {
       else toast.success("Google login successful");
       router.push("/");
     } catch (err) {
+      console.error("Google login error:", err);
       toast.error(err.message || "Google login failed");
     } finally {
       setLoading(false);
@@ -52,40 +57,58 @@ export default function LoginPage() {
 
   return (
     <section className="container flex min-h-[80vh] items-center justify-center py-12">
-      <div className="w-full max-w-md rounded-2xl border border-[var(--line)] bg-white p-8 shadow-lg">
+      <div className="w-full max-w-md rounded-lg border border-[var(--line)] bg-white p-8 shadow-lg">
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-black">Welcome back</h1>
-          <p className="mt-1 text-sm text-[var(--muted)]">Login to your AxleWay account</p>
+          <p className="mt-1 text-sm text-[var(--muted)]">
+            Login to your AxleWay account
+          </p>
         </div>
 
         <button
           type="button"
           disabled={loading}
           onClick={handleGoogleLogin}
-          className="w-full rounded-xl bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-50"
+          className="w-full rounded-md bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-50"
         >
           Continue with Google
         </button>
 
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-[var(--line)]" />
-          <span className="text-xs text-[var(--muted)]">or sign in with email</span>
+          <span className="text-xs text-[var(--muted)]">
+            or sign in with email
+          </span>
           <div className="h-px flex-1 bg-[var(--line)]" />
         </div>
 
         <form className="space-y-4" onSubmit={handleLogin}>
           <label className="block text-sm font-bold">
             Email
-            <input required autoComplete="email" className={inputClass} name="email" placeholder="you@example.com" type="email" />
+            <input
+              required
+              autoComplete="email"
+              className={inputClass}
+              name="email"
+              placeholder="you@example.com"
+              type="email"
+            />
           </label>
           <label className="block text-sm font-bold">
             Password
-            <input required autoComplete="current-password" className={inputClass} name="password" placeholder="Enter your password" type="password" />
+            <input
+              required
+              autoComplete="current-password"
+              className={inputClass}
+              name="password"
+              placeholder="Enter your password"
+              type="password"
+            />
           </label>
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-60"
+            className="w-full rounded-md bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-60"
           >
             {loading ? "Signing in…" : "Login"}
           </button>
@@ -93,7 +116,9 @@ export default function LoginPage() {
 
         <p className="mt-6 text-center text-sm text-[var(--muted)]">
           New to AxleWay?{" "}
-          <Link className="font-bold text-[var(--accent)]" href="/register">Create an account</Link>
+          <Link className="font-bold text-[var(--accent)]" href="/register">
+            Create an account
+          </Link>
         </p>
       </div>
     </section>

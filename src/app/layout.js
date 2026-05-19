@@ -11,12 +11,16 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata = {
   title: "AxleWay",
-  description: "A premium car rental platform for assignment CAT_05"
+  description: "A premium car rental platform for assignment CAT_05",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${outfit.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${outfit.variable}`}
+    >
       <body className="antialiased" suppressHydrationWarning>
         <AppProviders>
           <div className="page-shell">

@@ -41,12 +41,15 @@ export default function MyProfilePage() {
       const formData = new FormData();
       formData.append("image", file);
 
-      const res = await fetch("https://api.imgbb.com/1/upload?key=71f8541560b267adf2e51cd2cb15d14f", {
-        method: "POST",
-        body: formData
-      });
+      const res = await fetch(
+        "https://api.imgbb.com/1/upload?key=71f8541560b267adf2e51cd2cb15d14f",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
       const data = await res.json();
-      
+
       if (data.success) {
         const urlInput = document.getElementById("photoURLInput");
         if (urlInput) urlInput.value = data.data.display_url;
@@ -72,13 +75,13 @@ export default function MyProfilePage() {
         setLoading(true);
         const [carsData, bookingsData] = await Promise.all([
           apiFetch(`/cars/owner/${user.email}`),
-          apiFetch("/bookings")
+          apiFetch("/bookings"),
         ]);
 
         if (!ignore) {
           setStats({
             cars: carsData?.length || 0,
-            bookings: bookingsData?.length || 0
+            bookings: bookingsData?.length || 0,
           });
         }
       } catch (error) {
@@ -113,20 +116,30 @@ export default function MyProfilePage() {
             <div className="flex flex-col items-center text-center">
               <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-[var(--accent-soft)] text-3xl font-black text-[var(--accent-dark)]">
                 {user.photoURL ? (
-                  <img className="h-full w-full object-cover" src={user.photoURL} alt={user.displayName} />
+                  <img
+                    className="h-full w-full object-cover"
+                    src={user.photoURL}
+                    alt={user.displayName}
+                  />
                 ) : (
-                  (user.displayName || user.email || "U").charAt(0).toUpperCase()
+                  (user.displayName || user.email || "U")
+                    .charAt(0)
+                    .toUpperCase()
                 )}
               </div>
-              <h2 className="mt-4 text-xl font-bold">{user.displayName || "User"}</h2>
+              <h2 className="mt-4 text-xl font-bold">
+                {user.displayName || "User"}
+              </h2>
               <p className="text-sm text-[var(--muted)]">{user.email}</p>
             </div>
             <div className="mt-6 border-t border-[var(--line)] pt-4 text-center">
-              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">Status</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">
+                Status
+              </p>
               <p className="mt-1 font-bold text-green-600">Active Member</p>
               <button
                 onClick={() => setIsEditing(true)}
-                className="mt-4 w-full rounded-lg border border-[var(--line)] py-2 text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--panel-soft)]"
+                className="mt-4 w-full rounded-md border border-[var(--line)] py-2 text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--panel-soft)]"
               >
                 Edit Profile
               </button>
@@ -139,9 +152,14 @@ export default function MyProfilePage() {
               {loading ? (
                 <div className="mt-2 h-10 w-10 animate-spin rounded-full border-4 border-[var(--line)] border-t-[var(--accent)]" />
               ) : (
-                <p className="mt-2 text-5xl font-black text-[var(--accent)]">{stats.cars}</p>
+                <p className="mt-2 text-5xl font-black text-[var(--accent)]">
+                  {stats.cars}
+                </p>
               )}
-              <Link href="/my-added-cars" className="mt-4 text-sm font-bold text-[var(--accent)] hover:underline">
+              <Link
+                href="/my-added-cars"
+                className="mt-4 text-sm font-bold text-[var(--accent)] hover:underline"
+              >
                 Manage your cars &rarr;
               </Link>
             </div>
@@ -151,9 +169,14 @@ export default function MyProfilePage() {
               {loading ? (
                 <div className="mt-2 h-10 w-10 animate-spin rounded-full border-4 border-[var(--line)] border-t-[var(--accent)]" />
               ) : (
-                <p className="mt-2 text-5xl font-black text-[var(--action)]">{stats.bookings}</p>
+                <p className="mt-2 text-5xl font-black text-[var(--action)]">
+                  {stats.bookings}
+                </p>
               )}
-              <Link href="/my-bookings" className="mt-4 text-sm font-bold text-[var(--action)] hover:underline">
+              <Link
+                href="/my-bookings"
+                className="mt-4 text-sm font-bold text-[var(--action)] hover:underline"
+              >
                 View booking history &rarr;
               </Link>
             </div>
@@ -163,7 +186,10 @@ export default function MyProfilePage() {
 
       {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <form className="w-full max-w-sm rounded-lg border border-[var(--line)] bg-[var(--panel)] p-6 shadow-xl" onSubmit={handleEditProfile}>
+          <form
+            className="w-full max-w-sm rounded-lg border border-[var(--line)] bg-[var(--panel)] p-6 shadow-xl"
+            onSubmit={handleEditProfile}
+          >
             <h3 className="text-xl font-bold">Edit Profile</h3>
             <div className="mt-4 grid gap-4">
               <label className="block text-sm font-bold text-[var(--foreground)]">
@@ -172,7 +198,7 @@ export default function MyProfilePage() {
                   required
                   defaultValue={user.displayName || ""}
                   name="name"
-                  className="mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                  className="mt-2 h-12 w-full rounded-md border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
                 />
               </label>
               <label className="block text-sm font-bold text-[var(--foreground)]">
@@ -183,13 +209,13 @@ export default function MyProfilePage() {
                     type="url"
                     defaultValue={user.photoURL || ""}
                     name="photoURL"
-                    className="h-12 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                    className="h-12 w-full rounded-md border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
                   />
-                  <div className="relative flex w-36 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[var(--line)] bg-[var(--panel-soft)] font-bold text-[var(--muted)] transition hover:bg-[var(--line)]">
+                  <div className="relative flex w-36 shrink-0 cursor-pointer items-center justify-center rounded-md border border-[var(--line)] bg-[var(--panel-soft)] font-bold text-[var(--muted)] transition hover:bg-[var(--line)]">
                     <span className="text-xs">Upload File</span>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
+                    <input
+                      type="file"
+                      accept="image/*"
                       className="absolute inset-0 cursor-pointer opacity-0"
                       onChange={handleImageUpload}
                       disabled={editLoading}
@@ -209,7 +235,7 @@ export default function MyProfilePage() {
               <button
                 type="submit"
                 disabled={editLoading}
-                className="primary-button !min-h-[40px] px-6 !text-sm"
+                className="primary-button !rounded-md !min-h-[40px] px-6 !text-sm"
               >
                 {editLoading ? "Saving..." : "Save Changes"}
               </button>

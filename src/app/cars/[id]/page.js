@@ -8,9 +8,9 @@ import { PrivateRoute } from "@/components/PrivateRoute";
 import { apiFetch } from "@/lib/api";
 
 const inputClass =
-  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
+  "mt-2 h-12 w-full rounded-md border border-[var(--line)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 const textareaClass =
-  "mt-2 min-h-28 w-full rounded-lg border border-[var(--line)] bg-white px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
+  "mt-2 min-h-28 w-full rounded-md border border-[var(--line)] bg-white px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function CarDetailsPage() {
@@ -105,11 +105,11 @@ export default function CarDetailsPage() {
       </Link>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_420px]">
-        <div className="overflow-hidden rounded-xl border border-[var(--line)] bg-white p-2 shadow-sm">
-          <img className="h-[320px] w-full rounded-lg object-cover md:h-[520px]" src={car.image} alt={car.name} />
+        <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-sm">
+          <img className="h-[320px] w-full rounded-md object-cover md:h-[520px]" src={car.image} alt={car.name} />
         </div>
 
-        <aside className="rounded-xl border border-[var(--line)] bg-white p-6 shadow-sm flex flex-col justify-between">
+        <aside className="rounded-lg border border-[var(--line)] bg-white p-6 shadow-sm flex flex-col justify-between">
           <div>
             <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${
               car.availability === "Available"
@@ -132,7 +132,7 @@ export default function CarDetailsPage() {
           <button
             onClick={() => setBookingOpen(true)}
             disabled={car.availability !== "Available"}
-            className="mt-8 w-full rounded-xl bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-50 disabled:hover:bg-[var(--accent)]"
+            className="mt-8 w-full rounded-md bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-50 disabled:hover:bg-[var(--accent)]"
           >
             Book Now
           </button>
@@ -142,7 +142,7 @@ export default function CarDetailsPage() {
       {bookingOpen ? (
         <PrivateRoute>
           <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4 backdrop-blur-sm">
-            <form className="w-full max-w-lg rounded-xl border border-[var(--line)] bg-white p-6 shadow-2xl" onSubmit={handleBooking}>
+            <form className="w-full max-w-lg rounded-lg border border-[var(--line)] bg-white p-6 shadow-2xl" onSubmit={handleBooking}>
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
@@ -175,14 +175,14 @@ export default function CarDetailsPage() {
                     placeholder="Pickup time, trip plan, luggage, or driver preference."
                   />
                 </label>
-                <div className="rounded-lg bg-[var(--accent-soft)] p-4 text-sm font-bold text-[var(--accent)]">
+                <div className="rounded-md bg-[var(--accent-soft)] p-4 text-sm font-bold text-[var(--accent)]">
                   Estimated total: ${car.price} for one day
                 </div>
                 
                 <button
                   type="submit"
                   disabled={bookingLoading}
-                  className="w-full rounded-xl bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-60"
+                  className="w-full rounded-md bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-60"
                 >
                   {bookingLoading ? "Confirming…" : "Confirm Booking"}
                 </button>

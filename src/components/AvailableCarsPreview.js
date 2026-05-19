@@ -25,7 +25,9 @@ export function AvailableCarsPreview() {
     }
 
     loadCars();
-    return () => { ignore = true; };
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return (
@@ -34,9 +36,13 @@ export function AvailableCarsPreview() {
         {/* Header */}
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">Our Fleet</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+              Our Fleet
+            </p>
             <h2 className="mt-2 text-3xl font-black">Available Cars</h2>
-            <p className="mt-2 text-sm text-[var(--muted)]">Browse our top picks — updated in real time.</p>
+            <p className="mt-2 text-sm text-[var(--muted)]">
+              Browse our top picks — updated in real time.
+            </p>
           </div>
           <Link
             href="/cars"
@@ -50,7 +56,10 @@ export function AvailableCarsPreview() {
         {loading && (
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-72 animate-pulse rounded-xl bg-[var(--line)]" />
+              <div
+                key={i}
+                className="h-72 animate-pulse rounded-md bg-[var(--line)]"
+              />
             ))}
           </div>
         )}
@@ -61,7 +70,7 @@ export function AvailableCarsPreview() {
             {cars.map((car) => (
               <article
                 key={car._id || car.id}
-                className="group flex flex-col overflow-hidden rounded-xl border border-[var(--line)] bg-white shadow-sm transition hover:shadow-md"
+                className="group flex flex-col overflow-hidden rounded-lg border border-[var(--line)] bg-white shadow-sm transition hover:shadow-md"
               >
                 <div className="overflow-hidden">
                   <img
@@ -74,14 +83,17 @@ export function AvailableCarsPreview() {
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <h3 className="font-bold">{car.name}</h3>
-                      <p className="mt-0.5 text-sm text-[var(--muted)]">{car.type} · {car.location}</p>
+                      <p className="mt-0.5 text-sm text-[var(--muted)]">
+                        {car.type} · {car.location}
+                      </p>
                     </div>
-                    <span className="shrink-0 rounded-lg bg-[var(--accent-soft)] px-2 py-1 text-sm font-black text-[var(--accent)]">
-                      ${car.price}<span className="text-xs font-medium">/day</span>
+                    <span className="shrink-0 rounded-md bg-[var(--accent-soft)] px-2 py-1 text-sm font-black text-[var(--accent)]">
+                      ${car.price}
+                      <span className="text-xs font-medium">/day</span>
                     </span>
                   </div>
                   <Link
-                    className="mt-5 rounded-lg bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)]"
+                    className="mt-5 rounded-md bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)]"
                     href={`/cars/${car._id || car.id}`}
                   >
                     View Details
@@ -94,7 +106,7 @@ export function AvailableCarsPreview() {
 
         {/* Empty state */}
         {!loading && cars.length === 0 && (
-          <div className="rounded-xl border border-dashed border-[var(--line)] p-10 text-center text-[var(--muted)]">
+          <div className="rounded-lg border border-dashed border-[var(--line)] p-10 text-center text-[var(--muted)]">
             No cars available right now.
           </div>
         )}

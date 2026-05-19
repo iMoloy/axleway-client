@@ -6,12 +6,19 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api";
 
-const carTypes = ["SUV", "Sedan", "Hatchback", "Luxury", "Electric", "Microbus"];
+const carTypes = [
+  "SUV",
+  "Sedan",
+  "Hatchback",
+  "Luxury",
+  "Electric",
+  "Microbus",
+];
 
 const inputClass =
-  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+  "mt-2 h-12 w-full rounded-md border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 const textareaClass =
-  "mt-2 min-h-32 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+  "mt-2 min-h-32 w-full rounded-md border border-[var(--line)] bg-[var(--panel)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 function getTrimmedValue(formData, key) {
@@ -34,10 +41,16 @@ export default function AddCarPage() {
       seats: Number(formData.get("seats")),
       location: getTrimmedValue(formData, "location"),
       availability: getTrimmedValue(formData, "availability"),
-      description: getTrimmedValue(formData, "description")
+      description: getTrimmedValue(formData, "description"),
     };
 
-    if (!car.name || !car.type || !car.image || !car.location || !car.description) {
+    if (
+      !car.name ||
+      !car.type ||
+      !car.image ||
+      !car.location ||
+      !car.description
+    ) {
       toast.error("Please fill in all car details.");
       return;
     }
@@ -61,7 +74,7 @@ export default function AddCarPage() {
       setLoading(true);
       await apiFetch("/cars", {
         method: "POST",
-        body: JSON.stringify(car)
+        body: JSON.stringify(car),
       });
       toast.success("Car added successfully");
       form.reset();
@@ -81,12 +94,15 @@ export default function AddCarPage() {
       const formData = new FormData();
       formData.append("image", file);
 
-      const res = await fetch("https://api.imgbb.com/1/upload?key=71f8541560b267adf2e51cd2cb15d14f", {
-        method: "POST",
-        body: formData
-      });
+      const res = await fetch(
+        "https://api.imgbb.com/1/upload?key=71f8541560b267adf2e51cd2cb15d14f",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
       const data = await res.json();
-      
+
       if (data.success) {
         const urlInput = document.getElementById("carImageInput");
         if (urlInput) urlInput.value = data.data.display_url;
@@ -109,7 +125,9 @@ export default function AddCarPage() {
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
             Owner dashboard
           </p>
-          <h1 className="mt-2 text-3xl font-bold md:text-4xl">Add a rental car</h1>
+          <h1 className="mt-2 text-3xl font-bold md:text-4xl">
+            Add a rental car
+          </h1>
           <p className="mt-3 text-[var(--muted)]">
             Share the key details renters need before choosing a vehicle.
           </p>
@@ -121,12 +139,25 @@ export default function AddCarPage() {
         >
           <label className={labelClass}>
             Car Name
-            <input required className={inputClass} name="name" placeholder="Toyota Corolla Cross" type="text" />
+            <input
+              required
+              className={inputClass}
+              name="name"
+              placeholder="Toyota Corolla Cross"
+              type="text"
+            />
           </label>
 
           <label className={labelClass}>
             Daily Rent Price
-            <input required className={inputClass} min="1" name="price" placeholder="65" type="number" />
+            <input
+              required
+              className={inputClass}
+              min="1"
+              name="price"
+              placeholder="65"
+              type="number"
+            />
           </label>
 
           <label className={labelClass}>
@@ -145,7 +176,14 @@ export default function AddCarPage() {
 
           <label className={labelClass}>
             Seat Capacity
-            <input required className={inputClass} min="1" name="seats" placeholder="5" type="number" />
+            <input
+              required
+              className={inputClass}
+              min="1"
+              name="seats"
+              placeholder="5"
+              type="number"
+            />
           </label>
 
           <label className={labelClass}>
@@ -159,11 +197,11 @@ export default function AddCarPage() {
                 placeholder="https://example.com/car.jpg"
                 type="url"
               />
-              <div className="relative flex w-36 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[var(--line)] bg-[var(--panel-soft)] font-bold text-[var(--muted)] transition hover:bg-[var(--line)]">
+              <div className="relative flex w-36 shrink-0 cursor-pointer items-center justify-center rounded-md border border-[var(--line)] bg-[var(--panel-soft)] font-bold text-[var(--muted)] transition hover:bg-[var(--line)]">
                 <span className="text-xs">Upload File</span>
-                <input 
-                  type="file" 
-                  accept="image/*" 
+                <input
+                  type="file"
+                  accept="image/*"
                   className="absolute inset-0 cursor-pointer opacity-0"
                   onChange={handleImageUpload}
                   disabled={loading}
@@ -174,12 +212,23 @@ export default function AddCarPage() {
 
           <label className={labelClass}>
             Pickup Location
-            <input required className={inputClass} name="location" placeholder="Gulshan, Dhaka" type="text" />
+            <input
+              required
+              className={inputClass}
+              name="location"
+              placeholder="Gulshan, Dhaka"
+              type="text"
+            />
           </label>
 
           <label className={labelClass}>
             Availability Status
-            <select required className={inputClass} defaultValue="Available" name="availability">
+            <select
+              required
+              className={inputClass}
+              defaultValue="Available"
+              name="availability"
+            >
               <option value="Available">Available</option>
               <option value="Unavailable">Unavailable</option>
             </select>
@@ -196,10 +245,21 @@ export default function AddCarPage() {
           </label>
 
           <div className="flex flex-col gap-3 md:col-span-2 md:flex-row md:justify-end">
-            <Button className="font-bold" type="reset" variant="bordered">
+            <Button
+              className="font-bold"
+              type="reset"
+              variant="bordered"
+              radius="sm"
+            >
               Clear Form
             </Button>
-            <Button className="font-bold" color="primary" isLoading={loading} type="submit">
+            <Button
+              className="font-bold"
+              color="primary"
+              isLoading={loading}
+              type="submit"
+              radius="sm"
+            >
               Add Car
             </Button>
           </div>

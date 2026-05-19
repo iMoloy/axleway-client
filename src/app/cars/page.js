@@ -5,11 +5,19 @@ import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
 
 const ITEMS_PER_PAGE = 6;
-const carTypes = ["All", "SUV", "Sedan", "Hatchback", "Luxury", "Electric", "Microbus"];
+const carTypes = [
+  "All",
+  "SUV",
+  "Sedan",
+  "Hatchback",
+  "Luxury",
+  "Electric",
+  "Microbus",
+];
 const availabilityOptions = ["All", "Available", "Unavailable"];
 
 const controlClass =
-  "h-12 rounded-lg border border-[var(--line)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
+  "h-12 rounded-md border border-[var(--line)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 
 export default function CarsPage() {
   const [cars, setCars] = useState([]);
@@ -63,9 +71,12 @@ export default function CarsPage() {
 
   const filteredCars = useMemo(() => {
     return cars.filter((car) => {
-      const matchesSearch = car.name?.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch = car.name
+        ?.toLowerCase()
+        .includes(search.toLowerCase());
       const matchesType = type === "All" || car.type === type;
-      const matchesAvailability = availability === "All" || car.availability === availability;
+      const matchesAvailability =
+        availability === "All" || car.availability === availability;
       return matchesSearch && matchesType && matchesAvailability;
     });
   }, [availability, search, type, cars]);
@@ -73,7 +84,7 @@ export default function CarsPage() {
   const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
   const currentCars = filteredCars.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
   return (
@@ -84,13 +95,16 @@ export default function CarsPage() {
           <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
             Explore Fleet
           </p>
-          <h1 className="mt-2 text-3xl font-black">Find your next rental car</h1>
+          <h1 className="mt-2 text-3xl font-black">
+            Find your next rental car
+          </h1>
           <p className="mt-2 text-sm text-[var(--muted)]">
-            Search by name and filter by type or availability to find the perfect ride.
+            Search by name and filter by type or availability to find the
+            perfect ride.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent)]">
+          <p className="rounded-md bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent)]">
             {loading ? "Searching..." : `${filteredCars.length} cars found`}
           </p>
         </div>
@@ -99,7 +113,7 @@ export default function CarsPage() {
       {/* Filters Form */}
       <form
         onSubmit={handleSearchSubmit}
-        className="mb-8 grid gap-3 rounded-xl border border-[var(--line)] bg-[var(--panel-soft)] p-4 md:grid-cols-[1fr_120px_190px_190px]"
+        className="mb-8 grid gap-3 rounded-lg border border-[var(--line)] bg-[var(--panel-soft)] p-4 md:grid-cols-[1fr_120px_190px_190px]"
       >
         <input
           className={controlClass}
@@ -110,11 +124,15 @@ export default function CarsPage() {
         />
         <button
           type="submit"
-          className="h-12 rounded-lg bg-[var(--accent)] px-4 text-sm font-bold text-white transition hover:bg-[var(--accent-dark)]"
+          className="h-12 rounded-md bg-[var(--accent)] px-4 text-sm font-bold text-white transition hover:bg-[var(--accent-dark)]"
         >
           Search
         </button>
-        <select className={controlClass} value={type} onChange={(event) => setType(event.target.value)}>
+        <select
+          className={controlClass}
+          value={type}
+          onChange={(event) => setType(event.target.value)}
+        >
           {carTypes.map((option) => (
             <option key={option} value={option}>
               {option === "All" ? "All Types" : option}
@@ -138,7 +156,10 @@ export default function CarsPage() {
       {loading && (
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-96 animate-pulse rounded-xl bg-[var(--line)]" />
+            <div
+              key={i}
+              className="h-96 animate-pulse rounded-md bg-[var(--line)]"
+            />
           ))}
         </div>
       )}
@@ -150,7 +171,7 @@ export default function CarsPage() {
             {currentCars.map((car) => (
               <article
                 key={car._id || car.id}
-                className="group flex flex-col overflow-hidden rounded-xl border border-[var(--line)] bg-white shadow-sm transition hover:shadow-md"
+                className="group flex flex-col overflow-hidden rounded-lg border border-[var(--line)] bg-white shadow-sm transition hover:shadow-md"
               >
                 <div className="overflow-hidden">
                   <img
@@ -167,25 +188,33 @@ export default function CarsPage() {
                         {car.type} · {car.seats} seats
                       </p>
                     </div>
-                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${
-                      car.availability === "Available"
-                        ? "bg-emerald-50 text-emerald-600"
-                        : "bg-red-50 text-red-600"
-                    }`}>
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${
+                        car.availability === "Available"
+                          ? "bg-emerald-50 text-emerald-600"
+                          : "bg-red-50 text-red-600"
+                      }`}
+                    >
                       {car.availability}
                     </span>
                   </div>
                   <div className="mt-auto space-y-3">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="font-semibold text-[var(--muted)]">Pickup</span>
+                      <span className="font-semibold text-[var(--muted)]">
+                        Pickup
+                      </span>
                       <span className="font-bold">{car.location}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="font-semibold text-[var(--muted)]">Rent</span>
-                      <span className="text-lg font-black text-[var(--accent)]">${car.price}/day</span>
+                      <span className="font-semibold text-[var(--muted)]">
+                        Rent
+                      </span>
+                      <span className="text-lg font-black text-[var(--accent)]">
+                        ${car.price}/day
+                      </span>
                     </div>
                     <Link
-                      className="block rounded-lg bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)]"
+                      className="block rounded-md bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)]"
                       href={`/cars/${car._id || car.id}`}
                     >
                       View Details
@@ -202,7 +231,7 @@ export default function CarsPage() {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--line)] bg-white font-bold transition hover:bg-[var(--line)] disabled:opacity-50 disabled:hover:bg-white"
+                className="flex h-10 w-10 items-center justify-center rounded-md border border-[var(--line)] bg-white font-bold transition hover:bg-[var(--line)] disabled:opacity-50 disabled:hover:bg-white"
               >
                 &lt;
               </button>
@@ -210,7 +239,7 @@ export default function CarsPage() {
                 <button
                   key={i}
                   onClick={() => setCurrentPage(i + 1)}
-                  className={`flex h-10 w-10 items-center justify-center rounded-lg border font-bold transition ${
+                  className={`flex h-10 w-10 items-center justify-center rounded-md border font-bold transition ${
                     currentPage === i + 1
                       ? "border-[var(--accent)] bg-[var(--accent)] text-white"
                       : "border-[var(--line)] bg-white hover:bg-[var(--line)]"
@@ -220,9 +249,11 @@ export default function CarsPage() {
                 </button>
               ))}
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
                 disabled={currentPage === totalPages}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--line)] bg-white font-bold transition hover:bg-[var(--line)] disabled:opacity-50 disabled:hover:bg-white"
+                className="flex h-10 w-10 items-center justify-center rounded-md border border-[var(--line)] bg-white font-bold transition hover:bg-[var(--line)] disabled:opacity-50 disabled:hover:bg-white"
               >
                 &gt;
               </button>
@@ -233,7 +264,7 @@ export default function CarsPage() {
 
       {/* Empty State */}
       {!loading && currentCars.length === 0 && (
-        <div className="rounded-xl border border-dashed border-[var(--line)] bg-white p-10 text-center text-[var(--muted)]">
+        <div className="rounded-lg border border-dashed border-[var(--line)] bg-white p-10 text-center text-[var(--muted)]">
           No cars match your search.
         </div>
       )}

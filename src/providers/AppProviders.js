@@ -10,4 +10,3 @@ export function AppProviders({ children }) {
     </HeroUIProvider>
   );
 }
-

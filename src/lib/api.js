@@ -9,9 +9,9 @@ export async function apiFetch(path, options = {}) {
     credentials: "include",
     headers: {
       "content-type": "application/json",
-      ...(options.headers || {})
+      ...(options.headers || {}),
     },
-    ...options
+    ...options,
   });
 
   const data = await response.json().catch(() => null);

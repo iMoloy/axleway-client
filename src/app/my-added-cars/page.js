@@ -8,9 +8,9 @@ import { useAuth } from "@/providers/AuthProvider";
 import { apiFetch } from "@/lib/api";
 
 const inputClass =
-  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+  "mt-2 h-12 w-full rounded-md border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 const textareaClass =
-  "mt-2 min-h-28 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+  "mt-2 min-h-28 w-full rounded-md border border-[var(--line)] bg-[var(--panel)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function MyAddedCarsPage() {
@@ -64,7 +64,7 @@ export default function MyAddedCarsPage() {
       availability: formData.get("availability"),
       location: formData.get("location"),
       image: formData.get("image"),
-      description: formData.get("description")
+      description: formData.get("description"),
     };
 
     if (!editCar?._id) {
@@ -77,10 +77,12 @@ export default function MyAddedCarsPage() {
       setSaving(true);
       await apiFetch(`/cars/${editCar._id}`, {
         method: "PATCH",
-        body: JSON.stringify(updates)
+        body: JSON.stringify(updates),
       });
       setOwnerCars((current) =>
-        current.map((car) => (car._id === editCar._id ? { ...car, ...updates } : car))
+        current.map((car) =>
+          car._id === editCar._id ? { ...car, ...updates } : car,
+        ),
       );
       toast.success("Car updated successfully");
       setEditCar(null);
@@ -103,9 +105,11 @@ export default function MyAddedCarsPage() {
     try {
       setSaving(true);
       await apiFetch(`/cars/${deleteCar._id}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
-      setOwnerCars((current) => current.filter((car) => car._id !== deleteCar._id));
+      setOwnerCars((current) =>
+        current.filter((car) => car._id !== deleteCar._id),
+      );
       toast.success("Car deleted successfully");
       setDeleteCar(null);
     } catch (error) {
@@ -123,56 +127,80 @@ export default function MyAddedCarsPage() {
             <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
               Owner garage
             </p>
-            <h1 className="mt-2 text-3xl font-bold md:text-4xl">My Added Cars</h1>
+            <h1 className="mt-2 text-3xl font-bold md:text-4xl">
+              My Added Cars
+            </h1>
             <p className="mt-3 max-w-2xl text-[var(--muted)]">
-              Review your listed cars and keep price, availability, location, and descriptions up to date.
+              Review your listed cars and keep price, availability, location,
+              and descriptions up to date.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <p className="rounded-lg bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
-              {loading ? "Loading listings" : `${ownerCars.length} active listings`}
+            <p className="rounded-md bg-[var(--accent-soft)] px-4 py-2 text-sm font-bold text-[var(--accent-dark)]">
+              {loading
+                ? "Loading listings"
+                : `${ownerCars.length} active listings`}
             </p>
           </div>
         </div>
 
         {ownerCars.length ? (
           <div className="grid gap-5 lg:grid-cols-2">
-          {ownerCars.map((car) => (
-            <article
-              key={car._id || car.id}
-              className="grid overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm sm:grid-cols-[210px_1fr]"
-            >
-              <img className="h-56 w-full object-cover sm:h-full" src={car.image} alt={car.name} />
-              <div className="flex flex-col p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h2 className="text-xl font-bold">{car.name}</h2>
-                    <p className="mt-1 text-sm font-semibold text-[var(--muted)]">
-                      {car.type} · {car.location}
+            {ownerCars.map((car) => (
+              <article
+                key={car._id || car.id}
+                className="grid overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm sm:grid-cols-[210px_1fr]"
+              >
+                <img
+                  className="h-56 w-full object-cover sm:h-full"
+                  src={car.image}
+                  alt={car.name}
+                />
+                <div className="flex flex-col p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h2 className="text-xl font-bold">{car.name}</h2>
+                      <p className="mt-1 text-sm font-semibold text-[var(--muted)]">
+                        {car.type} · {car.location}
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-bold text-[var(--accent-dark)]">
+                      {car.availability}
+                    </span>
+                  </div>
+
+                  <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
+                    {car.description}
+                  </p>
+
+                  <div className="mt-auto pt-5">
+                    <p className="mb-4 text-2xl font-black text-[var(--action)]">
+                      ${car.price}/day
                     </p>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <Button
+                        className="font-bold"
+                        variant="bordered"
+                        radius="sm"
+                        onPress={() => setEditCar(car)}
+                      >
+                        Update
+                      </Button>
+                      <Button
+                        className="font-bold"
+                        color="danger"
+                        variant="flat"
+                        radius="sm"
+                        onPress={() => setDeleteCar(car)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </div>
-                  <span className="rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-bold text-[var(--accent-dark)]">
-                    {car.availability}
-                  </span>
                 </div>
-
-                <p className="mt-4 text-sm leading-6 text-[var(--muted)]">{car.description}</p>
-
-                <div className="mt-auto pt-5">
-                  <p className="mb-4 text-2xl font-black text-[var(--action)]">${car.price}/day</p>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <Button className="font-bold" variant="bordered" onPress={() => setEditCar(car)}>
-                      Update
-                    </Button>
-                    <Button className="font-bold" color="danger" variant="flat" onPress={() => setDeleteCar(car)}>
-                      Delete
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
         ) : (
           <div className="rounded-lg border border-dashed border-[var(--line)] bg-[var(--panel)] p-8 text-center text-[var(--muted)]">
             You have not added any cars yet.
@@ -181,7 +209,10 @@ export default function MyAddedCarsPage() {
 
         {editCar ? (
           <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-            <form className="w-full max-w-2xl rounded-lg bg-[var(--panel)] p-6 shadow-2xl" onSubmit={handleUpdate}>
+            <form
+              className="w-full max-w-2xl rounded-lg bg-[var(--panel)] p-6 shadow-2xl"
+              onSubmit={handleUpdate}
+            >
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
@@ -201,38 +232,77 @@ export default function MyAddedCarsPage() {
               <div className="mt-6 grid gap-5 md:grid-cols-2">
                 <label className={labelClass}>
                   Price
-                  <input className={inputClass} defaultValue={editCar.price} min="1" name="price" type="number" />
+                  <input
+                    className={inputClass}
+                    defaultValue={editCar.price}
+                    min="1"
+                    name="price"
+                    type="number"
+                  />
                 </label>
                 <label className={labelClass}>
                   Type
-                  <input className={inputClass} defaultValue={editCar.type} name="type" type="text" />
+                  <input
+                    className={inputClass}
+                    defaultValue={editCar.type}
+                    name="type"
+                    type="text"
+                  />
                 </label>
                 <label className={labelClass}>
                   Availability
-                  <select className={inputClass} defaultValue={editCar.availability} name="availability">
+                  <select
+                    className={inputClass}
+                    defaultValue={editCar.availability}
+                    name="availability"
+                  >
                     <option value="Available">Available</option>
                     <option value="Unavailable">Unavailable</option>
                   </select>
                 </label>
                 <label className={labelClass}>
                   Location
-                  <input className={inputClass} defaultValue={editCar.location} name="location" type="text" />
+                  <input
+                    className={inputClass}
+                    defaultValue={editCar.location}
+                    name="location"
+                    type="text"
+                  />
                 </label>
                 <label className={`${labelClass} md:col-span-2`}>
                   Image
-                  <input className={inputClass} defaultValue={editCar.image} name="image" type="url" />
+                  <input
+                    className={inputClass}
+                    defaultValue={editCar.image}
+                    name="image"
+                    type="url"
+                  />
                 </label>
                 <label className={`${labelClass} md:col-span-2`}>
                   Description
-                  <textarea className={textareaClass} defaultValue={editCar.description} name="description" />
+                  <textarea
+                    className={textareaClass}
+                    defaultValue={editCar.description}
+                    name="description"
+                  />
                 </label>
               </div>
 
               <div className="mt-6 flex justify-end gap-3">
-                <Button type="button" variant="bordered" onPress={() => setEditCar(null)}>
+                <Button
+                  type="button"
+                  variant="bordered"
+                  radius="sm"
+                  onPress={() => setEditCar(null)}
+                >
                   Cancel
                 </Button>
-                <Button color="primary" isLoading={saving} type="submit">
+                <Button
+                  color="primary"
+                  isLoading={saving}
+                  type="submit"
+                  radius="sm"
+                >
                   Save Changes
                 </Button>
               </div>
@@ -245,13 +315,23 @@ export default function MyAddedCarsPage() {
             <div className="w-full max-w-md rounded-lg bg-[var(--panel)] p-6 shadow-2xl">
               <h2 className="text-2xl font-bold">Delete {deleteCar.name}?</h2>
               <p className="mt-3 text-[var(--muted)]">
-                This action will remove the listing from your owner dashboard after the server API is connected.
+                This action will remove the listing from your owner dashboard
+                after the server API is connected.
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <Button variant="bordered" onPress={() => setDeleteCar(null)}>
+                <Button
+                  variant="bordered"
+                  radius="sm"
+                  onPress={() => setDeleteCar(null)}
+                >
                   Cancel
                 </Button>
-                <Button color="danger" isLoading={saving} onPress={handleDelete}>
+                <Button
+                  color="danger"
+                  isLoading={saving}
+                  radius="sm"
+                  onPress={handleDelete}
+                >
                   Delete Car
                 </Button>
               </div>

@@ -9,8 +9,8 @@ export async function syncAuthCookie(user) {
       body: JSON.stringify({
         name: user.displayName,
         email: user.email,
-        photoURL: user.photoURL
-      })
+        photoURL: user.photoURL,
+      }),
     });
 
     return true;
