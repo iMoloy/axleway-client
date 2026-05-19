@@ -3,84 +3,14 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
 import { apiFetch } from "@/lib/api";
 
-const demoCars = [
-  {
-    id: "aero-sedan",
-    name: "Aero Sedan",
-    type: "Sedan",
-    price: 48,
-    seats: 5,
-    location: "Dhaka Airport",
-    availability: "Available",
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80",
-    description: "A smooth city sedan with calm handling, clean cabin space, and easy airport pickup."
-  },
-  {
-    id: "metro-suv",
-    name: "Metro SUV",
-    type: "SUV",
-    price: 72,
-    seats: 7,
-    location: "Gulshan",
-    availability: "Available",
-    image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1200&q=80",
-    description: "A roomy SUV for family routes, weekend plans, and comfortable group travel."
-  },
-  {
-    id: "city-hatch",
-    name: "City Hatch",
-    type: "Hatchback",
-    price: 36,
-    seats: 4,
-    location: "Dhanmondi",
-    availability: "Unavailable",
-    image: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    description: "A compact hatchback made for short city drives and easy parking."
-  },
-  {
-    id: "orbit-electric",
-    name: "Orbit Electric",
-    type: "Electric",
-    price: 62,
-    seats: 5,
-    location: "Banani",
-    availability: "Available",
-    image: "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=1200&q=80",
-    description: "A quiet electric ride with instant torque and low running cost for modern routes."
-  },
-  {
-    id: "summit-luxury",
-    name: "Summit Luxury",
-    type: "Luxury",
-    price: 110,
-    seats: 4,
-    location: "Uttara",
-    availability: "Available",
-    image: "https://images.unsplash.com/photo-1523983388277-336a66bf9bcd?auto=format&fit=crop&w=1200&q=80",
-    description: "A premium rental option with refined comfort for business and special events."
-  },
-  {
-    id: "family-microbus",
-    name: "Family Microbus",
-    type: "Microbus",
-    price: 88,
-    seats: 10,
-    location: "Mirpur",
-    availability: "Unavailable",
-    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80",
-    description: "A group-friendly microbus for tours, team travel, and family trips."
-  }
-];
-
 const inputClass =
-  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+  "mt-2 h-12 w-full rounded-lg border border-[var(--line)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 const textareaClass =
-  "mt-2 min-h-28 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
+  "mt-2 min-h-28 w-full rounded-lg border border-[var(--line)] bg-white px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function CarDetailsPage() {
@@ -88,7 +18,6 @@ export default function CarDetailsPage() {
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
-  const [usingDemoData, setUsingDemoData] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
 
   useEffect(() => {
@@ -100,12 +29,10 @@ export default function CarDetailsPage() {
         const data = await apiFetch(`/cars/${params.id}`);
         if (!ignore) {
           setCar(data);
-          setUsingDemoData(false);
         }
       } catch {
         if (!ignore) {
-          setCar(demoCars.find((item) => item.id === params.id) || null);
-          setUsingDemoData(true);
+          setCar(null);
         }
       } finally {
         if (!ignore) {
@@ -126,11 +53,6 @@ export default function CarDetailsPage() {
   const handleBooking = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-
-    if (usingDemoData) {
-      toast.info("Connect the server API to book this listing.");
-      return;
-    }
 
     const booking = {
       carId: car._id || car.id,
@@ -159,7 +81,7 @@ export default function CarDetailsPage() {
   if (loading) {
     return (
       <section className="container flex min-h-[60vh] items-center justify-center py-12">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--line)] border-t-[var(--action)]" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--line)] border-t-[var(--accent)]" />
       </section>
     );
   }
@@ -178,63 +100,62 @@ export default function CarDetailsPage() {
 
   return (
     <section className="container py-12 md:py-16">
-      <Link className="text-sm font-bold text-[var(--accent-dark)]" href="/cars">
-        Back to Explore Cars
+      <Link className="text-sm font-bold text-[var(--accent)] hover:underline" href="/cars">
+        ← Back to Explore Cars
       </Link>
 
-      {usingDemoData ? (
-        <p className="mt-5 inline-flex rounded-lg bg-[var(--highlight)] px-4 py-2 text-sm font-bold text-[var(--ink)]">
-          Showing demo listing while API data is unavailable
-        </p>
-      ) : null}
-
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_420px]">
-        <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] p-3 shadow-sm">
-          <img className="h-[320px] w-full rounded-md object-cover md:h-[520px]" src={car.image} alt={car.name} />
+        <div className="overflow-hidden rounded-xl border border-[var(--line)] bg-white p-2 shadow-sm">
+          <img className="h-[320px] w-full rounded-lg object-cover md:h-[520px]" src={car.image} alt={car.name} />
         </div>
 
-        <aside className="rounded-lg border border-[var(--line)] bg-[var(--panel)] p-6 shadow-sm">
-          <span className="rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-bold text-[var(--accent-dark)]">
-            {car.availability}
-          </span>
-          <h1 className="mt-4 text-3xl font-bold md:text-4xl">{car.name}</h1>
-          <p className="mt-3 leading-7 text-[var(--muted)]">{car.description}</p>
+        <aside className="rounded-xl border border-[var(--line)] bg-white p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${
+              car.availability === "Available"
+                ? "bg-emerald-50 text-emerald-600"
+                : "bg-red-50 text-red-600"
+            }`}>
+              {car.availability}
+            </span>
+            <h1 className="mt-4 text-3xl font-black">{car.name}</h1>
+            <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{car.description}</p>
 
-          <div className="mt-6 grid gap-3 text-sm">
-            <DetailRow label="Type" value={car.type} />
-            <DetailRow label="Seats" value={`${car.seats} seats`} />
-            <DetailRow label="Pickup" value={car.location} />
-            <DetailRow label="Daily Rent" value={`$${car.price}/day`} />
+            <div className="mt-6 grid gap-3 text-sm">
+              <DetailRow label="Type" value={car.type} />
+              <DetailRow label="Seats" value={`${car.seats} seats`} />
+              <DetailRow label="Pickup" value={car.location} />
+              <DetailRow label="Daily Rent" value={`$${car.price}/day`} />
+            </div>
           </div>
 
-          <Button
-            className="mt-7 w-full font-bold"
-            color="primary"
-            isDisabled={car.availability !== "Available"}
-            onPress={() => setBookingOpen(true)}
+          <button
+            onClick={() => setBookingOpen(true)}
+            disabled={car.availability !== "Available"}
+            className="mt-8 w-full rounded-xl bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-50 disabled:hover:bg-[var(--accent)]"
           >
             Book Now
-          </Button>
+          </button>
         </aside>
       </div>
 
       {bookingOpen ? (
         <PrivateRoute>
-          <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-            <form className="w-full max-w-lg rounded-lg bg-[var(--panel)] p-6 shadow-2xl" onSubmit={handleBooking}>
+          <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4 backdrop-blur-sm">
+            <form className="w-full max-w-lg rounded-xl border border-[var(--line)] bg-white p-6 shadow-2xl" onSubmit={handleBooking}>
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-sm font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
+                  <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
                     Booking request
                   </p>
-                  <h2 className="mt-2 text-2xl font-bold">{car.name}</h2>
+                  <h2 className="mt-2 text-2xl font-black">{car.name}</h2>
                 </div>
                 <button
-                  className="rounded-md px-3 py-1 text-xl font-bold hover:bg-[var(--accent-soft)]"
+                  className="rounded-md px-3 py-1 text-xl font-bold hover:bg-[var(--panel-soft)]"
                   type="button"
                   onClick={() => setBookingOpen(false)}
                 >
-                  x
+                  ✕
                 </button>
               </div>
 
@@ -254,12 +175,17 @@ export default function CarDetailsPage() {
                     placeholder="Pickup time, trip plan, luggage, or driver preference."
                   />
                 </label>
-                <div className="rounded-lg bg-[var(--accent-soft)] p-4 text-sm font-bold text-[var(--accent-dark)]">
+                <div className="rounded-lg bg-[var(--accent-soft)] p-4 text-sm font-bold text-[var(--accent)]">
                   Estimated total: ${car.price} for one day
                 </div>
-                <Button className="w-full font-bold" color="primary" isLoading={bookingLoading} type="submit">
-                  Confirm Booking
-                </Button>
+                
+                <button
+                  type="submit"
+                  disabled={bookingLoading}
+                  className="w-full rounded-xl bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-60"
+                >
+                  {bookingLoading ? "Confirming…" : "Confirm Booking"}
+                </button>
               </div>
             </form>
           </div>
@@ -273,7 +199,7 @@ function DetailRow({ label, value }) {
   return (
     <div className="flex items-center justify-between rounded-lg bg-[var(--panel-soft)] px-4 py-3">
       <span className="font-semibold text-[var(--muted)]">{label}</span>
-      <span className="font-black">{value}</span>
+      <span className="font-bold">{value}</span>
     </div>
   );
 }
