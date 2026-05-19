@@ -35,6 +35,7 @@ const demoBookings = [
 export default function MyBookingsPage() {
   const [bookings, setBookings] = useState(demoBookings);
   const [loading, setLoading] = useState(true);
+  const [canceling, setCanceling] = useState(false);
   const [usingDemoData, setUsingDemoData] = useState(true);
   const [cancelBooking, setCancelBooking] = useState(null);
 
@@ -68,9 +69,29 @@ export default function MyBookingsPage() {
     };
   }, []);
 
-  const handleCancel = () => {
-    toast.info("Cancel booking API will be connected with delete/update booking support.");
-    setCancelBooking(null);
+  const handleCancel = async () => {
+    const bookingId = cancelBooking?._id || cancelBooking?.id;
+
+    if (usingDemoData || !cancelBooking?._id) {
+      setBookings((current) => current.filter((booking) => booking.id !== bookingId));
+      toast.info("Demo booking removed locally. Server cancel works after API data loads.");
+      setCancelBooking(null);
+      return;
+    }
+
+    try {
+      setCanceling(true);
+      await apiFetch(`/bookings/${cancelBooking._id}`, {
+        method: "DELETE"
+      });
+      setBookings((current) => current.filter((booking) => booking._id !== cancelBooking._id));
+      toast.success("Booking canceled successfully");
+      setCancelBooking(null);
+    } catch (error) {
+      toast.error(error.message || "Could not cancel booking");
+    } finally {
+      setCanceling(false);
+    }
   };
 
   return (
@@ -169,13 +190,13 @@ export default function MyBookingsPage() {
             <div className="w-full max-w-md rounded-lg bg-[var(--panel)] p-6 shadow-2xl">
               <h2 className="text-2xl font-bold">Cancel {cancelBooking.carName}?</h2>
               <p className="mt-3 text-[var(--muted)]">
-                This will cancel the booking once the server booking API is connected.
+                This will remove the booking from your rental history.
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Button variant="bordered" onPress={() => setCancelBooking(null)}>
                   Keep Booking
                 </Button>
-                <Button color="danger" onPress={handleCancel}>
+                <Button color="danger" isLoading={canceling} onPress={handleCancel}>
                   Cancel Booking
                 </Button>
               </div>
