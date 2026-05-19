@@ -72,14 +72,16 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <button
-            className="grid h-10 w-10 place-items-center rounded-lg border border-[var(--line)] bg-[var(--panel)] text-lg font-black md:hidden"
-            type="button"
-            aria-label="Toggle navigation menu"
-            onClick={() => setMobileOpen((current) => !current)}
-          >
-            {mobileOpen ? "x" : "="}
-          </button>
+          {!user && (
+            <button
+              className="grid h-10 w-10 place-items-center rounded-lg border border-[var(--line)] bg-[var(--panel)] text-lg font-black md:hidden"
+              type="button"
+              aria-label="Toggle navigation menu"
+              onClick={() => setMobileOpen((current) => !current)}
+            >
+              {mobileOpen ? "x" : "="}
+            </button>
+          )}
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <button
@@ -160,7 +162,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {mobileOpen ? (
+      {!user && mobileOpen ? (
         <div className="border-t border-[var(--line)] bg-[var(--panel)] md:hidden">
           <nav className="container grid gap-2 py-4 text-sm font-bold">
             {navLinks.map((item) => (
@@ -173,50 +175,17 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
-
-            {user ? (
-              <>
-                {authNavLinks.map((item) => (
-                  <Link
-                    key={item.href}
-                    className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)] transition"
-                    href={item.href}
-                    onClick={closeMenus}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                {dropdownLinks.map((item) => (
-                  <Link
-                    key={item.href}
-                    className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)] transition"
-                    href={item.href}
-                    onClick={closeMenus}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                <button
-                  className="rounded-lg px-3 py-3 text-left font-bold text-red-600 hover:bg-red-50 transition"
-                  type="button"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <div className="grid gap-2 pt-2">
-                {pathname === "/login" ? (
-                  <Link className="primary-button w-full" href="/register" onClick={closeMenus}>
-                    Register
-                  </Link>
-                ) : (
-                  <Link className="primary-button secondary-button w-full" href="/login" onClick={closeMenus}>
-                    Login
-                  </Link>
-                )}
-              </div>
-            )}
+            <div className="grid gap-2 pt-2">
+              {pathname === "/login" ? (
+                <Link className="primary-button w-full" href="/register" onClick={closeMenus}>
+                  Register
+                </Link>
+              ) : (
+                <Link className="primary-button secondary-button w-full" href="/login" onClick={closeMenus}>
+                  Login
+                </Link>
+              )}
+            </div>
           </nav>
         </div>
       ) : null}
