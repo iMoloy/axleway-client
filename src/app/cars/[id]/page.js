@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
+import { apiFetch } from "@/lib/api";
 
-const cars = [
+const demoCars = [
   {
     id: "aero-sedan",
     name: "Aero Sedan",
@@ -84,14 +85,84 @@ const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
 export default function CarDetailsPage() {
   const params = useParams();
+  const [car, setCar] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [usingDemoData, setUsingDemoData] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
-  const car = cars.find((item) => item.id === params.id);
 
-  const handleBooking = (event) => {
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadCar() {
+      try {
+        setLoading(true);
+        const data = await apiFetch(`/cars/${params.id}`);
+        if (!ignore) {
+          setCar(data);
+          setUsingDemoData(false);
+        }
+      } catch {
+        if (!ignore) {
+          setCar(demoCars.find((item) => item.id === params.id) || null);
+          setUsingDemoData(true);
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    if (params.id) {
+      loadCar();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, [params.id]);
+
+  const handleBooking = async (event) => {
     event.preventDefault();
-    toast.info("Booking form is ready. Server booking API comes next.");
-    setBookingOpen(false);
+    const formData = new FormData(event.currentTarget);
+
+    if (usingDemoData) {
+      toast.info("Connect the server API to book this listing.");
+      return;
+    }
+
+    const booking = {
+      carId: car._id || car.id,
+      carName: car.name,
+      carType: car.type,
+      totalPrice: Number(car.price),
+      driverNeeded: formData.get("driverNeeded"),
+      note: formData.get("note")
+    };
+
+    try {
+      setBookingLoading(true);
+      await apiFetch("/bookings", {
+        method: "POST",
+        body: JSON.stringify(booking)
+      });
+      toast.success("Booking created successfully");
+      setBookingOpen(false);
+    } catch (error) {
+      toast.error(error.message || "Could not create booking");
+    } finally {
+      setBookingLoading(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <section className="container flex min-h-[60vh] items-center justify-center py-12">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--line)] border-t-[var(--action)]" />
+      </section>
+    );
+  }
 
   if (!car) {
     return (
@@ -110,6 +181,12 @@ export default function CarDetailsPage() {
       <Link className="text-sm font-bold text-[var(--accent-dark)]" href="/cars">
         Back to Explore Cars
       </Link>
+
+      {usingDemoData ? (
+        <p className="mt-5 inline-flex rounded-lg bg-[var(--highlight)] px-4 py-2 text-sm font-bold text-[var(--ink)]">
+          Showing demo listing while API data is unavailable
+        </p>
+      ) : null}
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_420px]">
         <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] p-3 shadow-sm">
@@ -180,7 +257,7 @@ export default function CarDetailsPage() {
                 <div className="rounded-lg bg-[var(--accent-soft)] p-4 text-sm font-bold text-[var(--accent-dark)]">
                   Estimated total: ${car.price} for one day
                 </div>
-                <Button className="w-full font-bold" color="primary" type="submit">
+                <Button className="w-full font-bold" color="primary" isLoading={bookingLoading} type="submit">
                   Confirm Booking
                 </Button>
               </div>
