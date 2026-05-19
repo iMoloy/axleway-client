@@ -11,11 +11,14 @@ const navLinks = [
   { href: "/cars", label: "Explore Cars" }
 ];
 
-const userLinks = [
-  { href: "/my-profile", label: "My Profile" },
+const authNavLinks = [
   { href: "/add-car", label: "Add Car" },
   { href: "/my-bookings", label: "My Bookings" },
   { href: "/my-added-cars", label: "My Added Cars" }
+];
+
+const dropdownLinks = [
+  { href: "/my-profile", label: "My Profile" }
 ];
 
 export function Navbar() {
@@ -43,7 +46,12 @@ export function Navbar() {
         </Link>
         <nav className="hidden items-center gap-5 text-sm font-semibold md:flex">
           {navLinks.map((item) => (
-            <Link key={item.href} href={item.href}>
+            <Link key={item.href} href={item.href} className="hover:text-[var(--accent)] transition">
+              {item.label}
+            </Link>
+          ))}
+          {user && authNavLinks.map((item) => (
+            <Link key={item.href} href={item.href} className="hover:text-[var(--accent)] transition">
               {item.label}
             </Link>
           ))}
@@ -91,7 +99,17 @@ export function Navbar() {
                       {item.label}
                     </Link>
                   ))}
-                  {userLinks.map((item) => (
+                  {authNavLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      className="block rounded-md px-3 py-2 text-sm font-semibold hover:bg-[var(--accent-soft)] md:hidden"
+                      href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                  {dropdownLinks.map((item) => (
                     <Link
                       key={item.href}
                       className="block rounded-md px-3 py-2 text-sm font-semibold hover:bg-[var(--accent-soft)]"
@@ -102,7 +120,7 @@ export function Navbar() {
                     </Link>
                   ))}
                   <button
-                    className="mt-1 w-full rounded-md px-3 py-2 text-left text-sm font-bold text-red-600 hover:bg-red-50"
+                    className="mt-1 w-full rounded-md px-3 py-2 text-left text-sm font-bold text-red-600 hover:bg-red-50 transition"
                     type="button"
                     onClick={handleLogout}
                   >
@@ -133,7 +151,7 @@ export function Navbar() {
             {navLinks.map((item) => (
               <Link
                 key={item.href}
-                className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)]"
+                className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)] transition"
                 href={item.href}
                 onClick={closeMenus}
               >
@@ -143,10 +161,20 @@ export function Navbar() {
 
             {user ? (
               <>
-                {userLinks.map((item) => (
+                {authNavLinks.map((item) => (
                   <Link
                     key={item.href}
-                    className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)]"
+                    className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)] transition"
+                    href={item.href}
+                    onClick={closeMenus}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                {dropdownLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    className="rounded-lg px-3 py-3 hover:bg-[var(--accent-soft)] transition"
                     href={item.href}
                     onClick={closeMenus}
                   >
@@ -154,7 +182,7 @@ export function Navbar() {
                   </Link>
                 ))}
                 <button
-                  className="rounded-lg px-3 py-3 text-left font-bold text-red-600 hover:bg-red-50"
+                  className="rounded-lg px-3 py-3 text-left font-bold text-red-600 hover:bg-red-50 transition"
                   type="button"
                   onClick={handleLogout}
                 >
