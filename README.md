@@ -47,9 +47,10 @@ npm install
 npm run dev
 ```
 
+The local client runs on `http://localhost:3000`.
+
 ## Build
 
 ```bash
 npm run build
 ```
-

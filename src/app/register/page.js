@@ -117,9 +117,8 @@ export default function RegisterPage() {
             />
           </label>
           <label className={labelClass}>
-            Photo URL
+            Photo URL (Optional)
             <input
-              required
               autoComplete="url"
               className={inputClass}
               name="photoURL"
