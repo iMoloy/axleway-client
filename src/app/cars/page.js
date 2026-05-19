@@ -64,6 +64,146 @@ const demoCars = [
     location: "Mirpur",
     availability: "Unavailable",
     image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "nova-sedan",
+    name: "Nova Sedan",
+    type: "Sedan",
+    price: 52,
+    seats: 5,
+    location: "Mohakhali",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "trailmax-suv",
+    name: "TrailMax SUV",
+    type: "SUV",
+    price: 82,
+    seats: 7,
+    location: "Bashundhara",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "spark-mini",
+    name: "Spark Mini",
+    type: "Hatchback",
+    price: 32,
+    seats: 4,
+    location: "Badda",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "pulse-ev",
+    name: "Pulse EV",
+    type: "Electric",
+    price: 68,
+    seats: 5,
+    location: "Niketan",
+    availability: "Unavailable",
+    image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "regal-cruiser",
+    name: "Regal Cruiser",
+    type: "Luxury",
+    price: 125,
+    seats: 4,
+    location: "Baridhara",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "tourline-microbus",
+    name: "TourLine Microbus",
+    type: "Microbus",
+    price: 95,
+    seats: 11,
+    location: "Khilgaon",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "civic-route",
+    name: "Civic Route",
+    type: "Sedan",
+    price: 50,
+    seats: 5,
+    location: "Farmgate",
+    availability: "Unavailable",
+    image: "https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "harbor-suv",
+    name: "Harbor SUV",
+    type: "SUV",
+    price: 78,
+    seats: 7,
+    location: "Lalmatia",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "swift-hatch",
+    name: "Swift Hatch",
+    type: "Hatchback",
+    price: 38,
+    seats: 4,
+    location: "Shantinagar",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "leafline-ev",
+    name: "Leafline EV",
+    type: "Electric",
+    price: 64,
+    seats: 5,
+    location: "Tejgaon",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "velvet-prime",
+    name: "Velvet Prime",
+    type: "Luxury",
+    price: 135,
+    seats: 4,
+    location: "Gulshan 2",
+    availability: "Unavailable",
+    image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "crewway-microbus",
+    name: "CrewWay Microbus",
+    type: "Microbus",
+    price: 92,
+    seats: 12,
+    location: "Jatrabari",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "campus-sedan",
+    name: "Campus Sedan",
+    type: "Sedan",
+    price: 44,
+    seats: 5,
+    location: "Mohammadpur",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "northstar-suv",
+    name: "Northstar SUV",
+    type: "SUV",
+    price: 84,
+    seats: 7,
+    location: "Uttara Sector 7",
+    availability: "Available",
+    image: "https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=900&q=80"
   }
 ];
 
