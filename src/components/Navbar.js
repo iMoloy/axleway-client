@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "@/providers/AuthProvider";
 
@@ -26,6 +26,21 @@ export function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
 
   const handleLogout = async () => {
     setMenuOpen(false);
@@ -66,7 +81,7 @@ export function Navbar() {
             {mobileOpen ? "x" : "="}
           </button>
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 className="flex h-10 items-center gap-2 rounded-lg border border-[var(--line)] bg-[var(--panel)] px-2 text-left transition hover:border-[var(--accent)]"
                 type="button"
