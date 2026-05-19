@@ -1,28 +1,5 @@
 import Link from "next/link";
-
-const demoCars = [
-  {
-    name: "Aero Sedan",
-    type: "Sedan",
-    price: 48,
-    location: "Dhaka Airport",
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    name: "Metro SUV",
-    type: "SUV",
-    price: 72,
-    location: "Gulshan",
-    image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    name: "City Hatch",
-    type: "Hatchback",
-    price: 36,
-    location: "Dhanmondi",
-    image: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=900&q=80"
-  }
-];
+import { AvailableCarsPreview } from "@/components/AvailableCarsPreview";
 
 const featureCards = [
   {
@@ -80,38 +57,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-[var(--line)] bg-[var(--panel)] py-14">
-        <div className="container">
-          <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <h2 className="text-3xl font-bold">Available Cars</h2>
-              <p className="mt-2 text-[var(--muted)]">A quick preview of the fleet renters can explore.</p>
-            </div>
-            <Link className="font-bold text-[var(--accent)]" href="/cars">
-              View all cars
-            </Link>
-          </div>
-          <div className="grid gap-5 md:grid-cols-3">
-            {demoCars.map((car) => (
-              <article key={car.name} className="flex h-full flex-col overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)]">
-                <img className="h-48 w-full object-cover" src={car.image} alt={car.name} />
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-xl font-bold">{car.name}</h3>
-                      <p className="text-sm text-[var(--muted)]">{car.type} · {car.location}</p>
-                    </div>
-                    <p className="font-bold text-[var(--accent)]">${car.price}/day</p>
-                  </div>
-                  <Link className="primary-button mt-5" href="/cars">
-                    View Details
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <AvailableCarsPreview />
 
       <section className="container py-14 md:py-20">
         <div className="mb-8 max-w-2xl">
