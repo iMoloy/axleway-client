@@ -67,6 +67,8 @@ const demoCars = [
   }
 ];
 
+const ITEMS_PER_PAGE = 6;
+
 const carTypes = ["All", "SUV", "Sedan", "Hatchback", "Luxury", "Electric", "Microbus"];
 const availabilityOptions = ["All", "Available", "Unavailable"];
 
@@ -80,6 +82,11 @@ export default function CarsPage() {
   const [availability, setAvailability] = useState("All");
   const [loading, setLoading] = useState(false);
   const [usingDemoData, setUsingDemoData] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, type, availability]);
 
   useEffect(() => {
     let ignore = false;
@@ -124,6 +131,12 @@ export default function CarsPage() {
       return matchesSearch && matchesType && matchesAvailability;
     });
   }, [availability, search, type]);
+
+  const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
+  const currentCars = filteredCars.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <section className="container py-12 md:py-16">
@@ -177,9 +190,9 @@ export default function CarsPage() {
         </select>
       </div>
 
-      {filteredCars.length ? (
+      {currentCars.length ? (
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filteredCars.map((car) => (
+          {currentCars.map((car) => (
             <article
               key={car._id || car.id}
               className="flex h-full flex-col overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm"
@@ -214,6 +227,38 @@ export default function CarsPage() {
             </article>
           ))}
         </div>
+        
+        {totalPages > 1 && (
+          <div className="mt-10 flex flex-wrap justify-center gap-2">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--line)] bg-[var(--panel)] font-bold transition hover:bg-[var(--line)] disabled:opacity-50 disabled:hover:bg-[var(--panel)]"
+            >
+              &lt;
+            </button>
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`flex h-10 w-10 items-center justify-center rounded-lg border font-bold transition ${
+                  currentPage === i + 1
+                    ? "border-[var(--action)] bg-[var(--action)] text-white"
+                    : "border-[var(--line)] bg-[var(--panel)] hover:bg-[var(--line)]"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--line)] bg-[var(--panel)] font-bold transition hover:bg-[var(--line)] disabled:opacity-50 disabled:hover:bg-[var(--panel)]"
+            >
+              &gt;
+            </button>
+          </div>
+        )}
       ) : (
         <div className="rounded-lg border border-dashed border-[var(--line)] bg-[var(--panel)] p-8 text-center text-[var(--muted)]">
           No cars match your search.
