@@ -331,6 +331,7 @@ export default function CarsPage() {
       </div>
 
       {currentCars.length ? (
+        <>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {currentCars.map((car) => (
             <article
@@ -399,6 +400,7 @@ export default function CarsPage() {
             </button>
           </div>
         )}
+        </>
       ) : (
         <div className="rounded-lg border border-dashed border-[var(--line)] bg-[var(--panel)] p-8 text-center text-[var(--muted)]">
           No cars match your search.
