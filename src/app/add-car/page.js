@@ -14,6 +14,10 @@ const textareaClass =
   "mt-2 min-h-32 w-full rounded-lg border border-[var(--line)] bg-[var(--panel)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
+function getTrimmedValue(formData, key) {
+  return String(formData.get(key) || "").trim();
+}
+
 export default function AddCarPage() {
   const [loading, setLoading] = useState(false);
 
@@ -23,15 +27,35 @@ export default function AddCarPage() {
     const formData = new FormData(form);
 
     const car = {
-      name: formData.get("name"),
+      name: getTrimmedValue(formData, "name"),
       price: Number(formData.get("price")),
-      type: formData.get("type"),
-      image: formData.get("image"),
+      type: getTrimmedValue(formData, "type"),
+      image: getTrimmedValue(formData, "image"),
       seats: Number(formData.get("seats")),
-      location: formData.get("location"),
-      availability: formData.get("availability"),
-      description: formData.get("description")
+      location: getTrimmedValue(formData, "location"),
+      availability: getTrimmedValue(formData, "availability"),
+      description: getTrimmedValue(formData, "description")
     };
+
+    if (!car.name || !car.type || !car.image || !car.location || !car.description) {
+      toast.error("Please fill in all car details.");
+      return;
+    }
+
+    if (!Number.isFinite(car.price) || car.price <= 0) {
+      toast.error("Daily rent price must be a positive number.");
+      return;
+    }
+
+    if (!Number.isFinite(car.seats) || car.seats <= 0) {
+      toast.error("Seat capacity must be a positive number.");
+      return;
+    }
+
+    if (car.description.length < 20) {
+      toast.error("Description should be at least 20 characters.");
+      return;
+    }
 
     try {
       setLoading(true);
