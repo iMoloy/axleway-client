@@ -1,29 +1,65 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { AvailableCarsPreview } from "@/components/AvailableCarsPreview";
 
-const featureCards = [
+const renterBenefits = [
   {
-    title: "Verified listings",
-    text: "Each listing keeps rent, seat count, pickup location, and availability in one quick scan."
+    title: "Transparent Pricing",
+    text: "No hidden service fees. You pay the exact daily rent price specified by the owner."
   },
   {
-    title: "Owner controls",
-    text: "Car owners can prepare listings, edit details, and manage availability from a focused dashboard."
+    title: "Verified Vehicles",
+    text: "Every car listing goes through verification to ensure safety, cleanliness, and road readiness."
   },
   {
-    title: "Booking clarity",
-    text: "Renters can review price, driver request, booking date, and trip notes before confirming."
+    title: "Flexible Options",
+    text: "Customize your rent request by choosing your pickup location and whether you need a driver."
   }
 ];
 
-const steps = [
-  "Choose a car that matches your route",
-  "Check pickup location and daily rent",
-  "Send booking details with driver preference",
-  "Track the request from My Bookings"
+const hostBenefits = [
+  {
+    title: "Passive Income",
+    text: "Turn your idle vehicle into weekly income. Set your daily price and watch your earnings grow."
+  },
+  {
+    title: "Complete Control",
+    text: "Review booking requests, select who rents your car, and manage calendar availability."
+  },
+  {
+    title: "Secure Platform",
+    text: "Communicate with verified renters and track your active bookings from your dashboard."
+  }
+];
+
+const faqs = [
+  {
+    question: "What documents do I need to rent a car?",
+    answer: "You will need a valid driver's license, a national identity card (NID), and a profile photo. The pickup location will be coordinates specified in the car description."
+  },
+  {
+    question: "How do I list my car and start earning?",
+    answer: "Create an account, go to the 'Add Car' page, fill in your vehicle details (pickup location, price, image URL, type, seats), and click submit. It goes live instantly."
+  },
+  {
+    question: "Is there support for booking cancellations?",
+    answer: "Yes, you can cancel your booking from 'My Bookings' page if the trip schedule changes. We recommend notifying the owner as early as possible."
+  },
+  {
+    question: "How do I contact the car owner/renter?",
+    answer: "Once a booking request is made, you can view the contact and pickup details, coordinates, and notes directly inside your dashboard."
+  }
 ];
 
 export default function HomePage() {
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const toggleFaq = (index) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -38,44 +74,41 @@ export default function HomePage() {
                   Premium Car Rental Platform
                 </span>
               </div>
-
-              <h1 className="section-title text-[var(--foreground)]">
-                Rent the right car,<br />
-                <span className="text-[var(--accent)]">every journey.</span>
+              <h1 className="text-4xl font-black leading-[1.1] tracking-tight md:text-5xl lg:text-6xl">
+                Rent verified cars, <br />
+                or host and earn.
               </h1>
-
-              <p className="mt-6 max-w-lg text-lg leading-8 text-[var(--muted)]">
-                Browse verified listings, check availability, and book in minutes. The cleanest rental experience—designed for real roads.
+              <p className="mt-6 text-base leading-7 text-[var(--muted)] md:text-lg">
+                AxleWay connects trusted owners with verified renters. Explore hundreds of reliable cars or start hosting your own today.
               </p>
-
-              <div className="mt-10 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link
-                  className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-6 py-3 text-sm font-bold !text-white shadow-lg shadow-blue-500/25 transition hover:bg-[var(--accent-dark)]"
+                  className="rounded-xl bg-[var(--accent)] px-6 py-3.5 text-sm font-bold !text-white shadow-md shadow-blue-500/10 transition hover:bg-[var(--accent-dark)]"
                   href="/cars"
                 >
                   Explore Cars →
                 </Link>
                 <Link
-                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--line)] bg-white px-6 py-3 text-sm font-bold text-[var(--foreground)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                  className="rounded-xl border border-[var(--line)] bg-white px-6 py-3.5 text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--panel-soft)]"
                   href="/add-car"
                 >
                   List Your Car
                 </Link>
               </div>
 
-              {/* Stats row */}
+              {/* Stats Row */}
               <div className="mt-12 flex flex-wrap gap-8 border-t border-[var(--line)] pt-8">
                 <div>
-                  <p className="text-2xl font-black text-[var(--foreground)]">20+</p>
-                  <p className="text-sm text-[var(--muted)]">Verified Cars</p>
+                  <p className="text-2xl font-black">20+</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Verified Cars</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-black text-[var(--foreground)]">100%</p>
-                  <p className="text-sm text-[var(--muted)]">Trusted Owners</p>
+                  <p className="text-2xl font-black">100%</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Trusted Hosts</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-black text-[var(--foreground)]">6+</p>
-                  <p className="text-sm text-[var(--muted)]">Cities Covered</p>
+                  <p className="text-2xl font-black">6+</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Major Cities</p>
                 </div>
               </div>
             </div>
@@ -86,72 +119,141 @@ export default function HomePage() {
                 <img
                   className="h-[400px] w-full rounded-xl object-cover"
                   src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80"
-                  alt="Premium rental car"
+                  alt="Premium car rental"
                 />
-                {/* Floating price badge */}
-                <div className="absolute bottom-6 left-6 rounded-xl bg-white/95 px-4 py-3 shadow-xl backdrop-blur-sm">
-                  <p className="text-xs font-bold text-[var(--muted)]">Starting from</p>
-                  <p className="text-xl font-black text-[var(--accent)]">$35 <span className="text-sm font-semibold text-[var(--muted)]">/ day</span></p>
-                </div>
+              </div>
+
+              {/* Floating Price Badge */}
+              <div className="absolute -bottom-4 -left-4 rounded-xl border border-[var(--line)] bg-white p-4 shadow-lg">
+                <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Premium Fleet</p>
+                <p className="mt-1 text-lg font-black text-[var(--accent)]">From $35/day</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Available Cars Grid Preview */}
       <AvailableCarsPreview />
 
-      <section className="container py-14 md:py-20">
-        <div className="mb-8 max-w-2xl">
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
-            Built for rental flow
+      {/* Why Choose AxleWay Section */}
+      <section className="container py-16 md:py-24">
+        <div className="mb-12 text-center">
+          <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+            How it works
           </p>
-          <h2 className="mt-2 text-3xl font-bold md:text-4xl">Everything feels close to the road.</h2>
-          <p className="mt-3 text-[var(--muted)]">
-            AxleWay keeps the experience direct, so renters and owners can move without hunting through cluttered screens.
-          </p>
+          <h2 className="mt-2 text-3xl font-black tracking-tight md:text-4xl">One platform. Built for both sides.</h2>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-3">
-          {featureCards.map((feature, index) => (
-            <article
-              key={feature.title}
-              className="rounded-lg border border-[var(--line)] bg-[var(--panel)] p-6 shadow-sm"
-            >
-              <span className="grid h-11 w-11 place-items-center rounded-lg bg-[var(--accent-soft)] text-lg font-black text-[var(--accent)]">
-                {index + 1}
-              </span>
-              <h3 className="mt-5 text-xl font-bold">{feature.title}</h3>
-              <p className="mt-3 leading-7 text-[var(--muted)]">{feature.text}</p>
-            </article>
-          ))}
+        <div className="grid gap-12 lg:grid-cols-2">
+          {/* Renters Column */}
+          <div className="rounded-2xl border border-[var(--line)] bg-[var(--panel-soft)] p-8">
+            <h3 className="text-xl font-black text-[var(--accent)]">For Renters</h3>
+            <p className="mt-2 text-sm text-[var(--muted)]">Looking for a smooth ride? Renting has never been easier.</p>
+            
+            <div className="mt-8 space-y-6">
+              {renterBenefits.map((benefit) => (
+                <div key={benefit.title} className="flex gap-4">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-xs font-bold text-[var(--accent)]">✓</span>
+                  <div>
+                    <h4 className="font-bold text-sm text-[var(--foreground)]">{benefit.title}</h4>
+                    <p className="mt-1 text-xs text-[var(--muted)] leading-relaxed">{benefit.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Hosts Column */}
+          <div className="rounded-2xl border border-[var(--line)] bg-[var(--panel-soft)] p-8">
+            <h3 className="text-xl font-black text-[var(--foreground)]">For Car Owners</h3>
+            <p className="mt-2 text-sm text-[var(--muted)]">Have an extra vehicle? List it and earn passive income safely.</p>
+
+            <div className="mt-8 space-y-6">
+              {hostBenefits.map((benefit) => (
+                <div key={benefit.title} className="flex gap-4">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-bold text-neutral-800">✓</span>
+                  <div>
+                    <h4 className="font-bold text-sm text-[var(--foreground)]">{benefit.title}</h4>
+                    <p className="mt-1 text-xs text-[var(--muted)] leading-relaxed">{benefit.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="border-y border-[var(--line)] bg-[var(--ink)] py-14 text-white md:py-20">
-        <div className="container grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-center">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
-              Pickup workflow
+      {/* Trust & Safety Banner */}
+      <section className="border-t border-[var(--line)] bg-white py-12">
+        <div className="container">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="flex items-start gap-3">
+              <span className="text-xl">🛡️</span>
+              <div>
+                <h4 className="font-bold text-sm">Verified Listings</h4>
+                <p className="mt-1 text-xs text-[var(--muted)]">All owner listings are verified before they go live.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-xl">🔑</span>
+              <div>
+                <h4 className="font-bold text-sm">Secure Renting</h4>
+                <p className="mt-1 text-xs text-[var(--muted)]">Secure JWT token auth protects user dashboards & bookings.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-xl">💬</span>
+              <div>
+                <h4 className="font-bold text-sm">Direct Notes</h4>
+                <p className="mt-1 text-xs text-[var(--muted)]">Communicate pickup instructions & custom requirements.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-xl">📞</span>
+              <div>
+                <h4 className="font-bold text-sm">Help & Support</h4>
+                <p className="mt-1 text-xs text-[var(--muted)]">Reach our help center anytime for any trip issues.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="border-t border-[var(--line)] bg-[var(--ink)] py-16 text-white md:py-24">
+        <div className="container max-w-3xl">
+          <div className="mb-12 text-center">
+            <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+              Support Center
             </p>
-            <h2 className="mt-2 text-3xl font-bold md:text-4xl">From search to steering wheel in four clear steps.</h2>
-            <p className="mt-4 leading-7 text-white/75">
-              The interface is shaped around real rental decisions: location, price, availability, and booking context.
-            </p>
+            <h2 className="mt-2 text-3xl font-black tracking-tight md:text-4xl text-white">Frequently Asked Questions</h2>
           </div>
 
-          <div className="grid gap-3">
-            {steps.map((step, index) => (
-              <div
-                key={step}
-                className="flex items-center gap-4 rounded-lg border border-white/10 bg-white/5 p-4"
-              >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[var(--accent)] font-black text-white">
-                  {index + 1}
-                </span>
-                <p className="font-bold">{step}</p>
-              </div>
-            ))}
+          <div className="space-y-4">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div
+                  key={index}
+                  className="rounded-xl border border-white/5 bg-white/5 overflow-hidden transition"
+                >
+                  <button
+                    onClick={() => toggleFaq(index)}
+                    className="flex w-full items-center justify-between p-5 text-left text-sm font-bold text-white hover:bg-white/5"
+                    type="button"
+                  >
+                    <span>{faq.question}</span>
+                    <span className="text-[var(--accent)] text-lg">{isOpen ? "−" : "+"}</span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-5 pb-5 pt-1 text-xs leading-relaxed text-white/70 border-t border-white/5">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

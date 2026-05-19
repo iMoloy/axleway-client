@@ -13,6 +13,7 @@ const controlClass =
 
 export default function CarsPage() {
   const [cars, setCars] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [type, setType] = useState("All");
   const [availability, setAvailability] = useState("All");
@@ -55,6 +56,11 @@ export default function CarsPage() {
     };
   }, [search, type]);
 
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    setSearch(searchInput);
+  };
+
   const filteredCars = useMemo(() => {
     return cars.filter((car) => {
       const matchesSearch = car.name?.toLowerCase().includes(search.toLowerCase());
@@ -90,15 +96,24 @@ export default function CarsPage() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="mb-8 grid gap-3 rounded-xl border border-[var(--line)] bg-[var(--panel-soft)] p-4 md:grid-cols-[1fr_190px_190px]">
+      {/* Filters Form */}
+      <form
+        onSubmit={handleSearchSubmit}
+        className="mb-8 grid gap-3 rounded-xl border border-[var(--line)] bg-[var(--panel-soft)] p-4 md:grid-cols-[1fr_120px_190px_190px]"
+      >
         <input
           className={controlClass}
           placeholder="Search by car name"
           type="search"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          value={searchInput}
+          onChange={(event) => setSearchInput(event.target.value)}
         />
+        <button
+          type="submit"
+          className="h-12 rounded-lg bg-[var(--accent)] px-4 text-sm font-bold text-white transition hover:bg-[var(--accent-dark)]"
+        >
+          Search
+        </button>
         <select className={controlClass} value={type} onChange={(event) => setType(event.target.value)}>
           {carTypes.map((option) => (
             <option key={option} value={option}>
@@ -117,7 +132,7 @@ export default function CarsPage() {
             </option>
           ))}
         </select>
-      </div>
+      </form>
 
       {/* Loading Skeletons */}
       {loading && (
