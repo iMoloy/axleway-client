@@ -95,7 +95,7 @@ export default function AddCarPage() {
       formData.append("image", file);
 
       const res = await fetch(
-        "https://api.imgbb.com/1/upload?key=71f8541560b267adf2e51cd2cb15d14f",
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
         {
           method: "POST",
           body: formData,

@@ -180,31 +180,27 @@ export function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              {pathname === "/login" ? (
-                <Button
-                  as={Link}
-                  color="primary"
-                  href="/register"
-                  className="font-bold rounded-md bg-[var(--accent)] hover:bg-[var(--accent-dark)] !text-white"
-                  size="sm"
-                  variant="solid"
-                  radius="sm"
-                >
-                  Register
-                </Button>
-              ) : (
-                <Button
-                  as={Link}
-                  color="primary"
-                  href="/login"
-                  className="font-bold rounded-md bg-[var(--accent)] hover:bg-[var(--accent-dark)] !text-white"
-                  size="sm"
-                  variant="solid"
-                  radius="sm"
-                >
-                  Login
-                </Button>
-              )}
+              <Button
+                as={Link}
+                color="primary"
+                href="/login"
+                className="font-bold rounded-md bg-[var(--accent)] hover:bg-[var(--accent-dark)] !text-white"
+                size="sm"
+                variant="solid"
+                radius="sm"
+              >
+                Login
+              </Button>
+              <Button
+                as={Link}
+                href="/register"
+                className="font-bold rounded-md border border-white/20 bg-white/10 hover:bg-white/20 !text-white"
+                size="sm"
+                variant="bordered"
+                radius="sm"
+              >
+                Register
+              </Button>
             </div>
           )}
         </div>
@@ -225,23 +221,20 @@ export function Navbar() {
               </Link>
             ))}
             <div className="mt-2 grid gap-2 border-t border-white/10 pt-4">
-              {pathname === "/login" ? (
-                <Link
-                  className="primary-button w-full text-center rounded-md"
-                  href="/register"
-                  onClick={closeMenus}
-                >
-                  Register
-                </Link>
-              ) : (
-                <Link
-                  className="primary-button secondary-button w-full text-center rounded-md"
-                  href="/login"
-                  onClick={closeMenus}
-                >
-                  Login
-                </Link>
-              )}
+              <Link
+                className="primary-button w-full text-center rounded-md"
+                href="/login"
+                onClick={closeMenus}
+              >
+                Login
+              </Link>
+              <Link
+                className="primary-button secondary-button w-full text-center rounded-md"
+                href="/register"
+                onClick={closeMenus}
+              >
+                Register
+              </Link>
             </div>
           </nav>
         </div>
