@@ -194,9 +194,9 @@ export function Navbar() {
               <Button
                 as={Link}
                 href="/register"
-                className="font-bold rounded-md border border-white/20 bg-white/10 hover:bg-white/20 !text-white"
+                className="font-bold rounded-md border border-white/30 bg-white !text-black hover:bg-white/90"
                 size="sm"
-                variant="bordered"
+                variant="solid"
                 radius="sm"
               >
                 Register
@@ -229,7 +229,7 @@ export function Navbar() {
                 Login
               </Link>
               <Link
-                className="primary-button secondary-button w-full text-center rounded-md"
+                className="block w-full rounded-md border border-white/30 bg-white py-3 text-center text-sm font-bold !text-black transition hover:bg-white/90"
                 href="/register"
                 onClick={closeMenus}
               >
