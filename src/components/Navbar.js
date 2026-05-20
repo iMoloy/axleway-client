@@ -191,12 +191,16 @@ export function Navbar() {
               >
                 Login
               </Button>
-              <Link
+              <Button
+                as={Link}
                 href="/register"
-                className="inline-flex items-center justify-center font-bold rounded-md border border-[var(--line)] bg-white px-4 py-2 text-sm text-[var(--foreground)] transition hover:bg-[var(--panel-soft)]"
+                className="font-bold rounded-md border border-[var(--line)] bg-white !text-black hover:bg-[var(--panel-soft)]"
+                size="sm"
+                variant="solid"
+                radius="sm"
               >
                 Register
-              </Link>
+              </Button>
             </div>
           )}
         </div>
@@ -225,7 +229,7 @@ export function Navbar() {
                 Login
               </Link>
               <Link
-                className="block w-full rounded-md border border-[var(--line)] bg-white py-3 text-center text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--panel-soft)]"
+                className="block w-full rounded-md border border-[var(--line)] bg-white py-3 text-center text-sm font-bold !text-black transition hover:bg-[var(--panel-soft)]"
                 href="/register"
                 onClick={closeMenus}
               >
