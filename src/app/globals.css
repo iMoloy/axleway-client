@@ -91,3 +91,28 @@ button,
 .secondary-button:hover {
   background: var(--accent-dark);
 }
+
+/* ── Toastify Custom Theme ── */
+.Toastify__toast {
+  background: #0a0a0a !important;
+  color: #ffffff !important;
+  border: 1px solid #1e1e1e;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.Toastify__toast-icon svg {
+  fill: #2563eb !important;
+}
+
+.Toastify__progress-bar {
+  background: #2563eb !important;
+}
+
+.Toastify__close-button {
+  color: #71717a !important;
+}
+
+.Toastify__close-button:hover {
+  color: #ffffff !important;
+}
