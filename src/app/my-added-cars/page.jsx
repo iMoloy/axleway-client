@@ -315,8 +315,8 @@ export default function MyAddedCarsPage() {
             <div className="w-full max-w-md rounded-lg bg-[var(--panel)] p-6 shadow-2xl">
               <h2 className="text-2xl font-bold">Delete {deleteCar.name}?</h2>
               <p className="mt-3 text-[var(--muted)]">
-                This action is permanent and cannot be undone. The listing
-                will be removed from the platform immediately.
+                This action is permanent and cannot be undone. The listing will
+                be removed from the platform immediately.
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Button

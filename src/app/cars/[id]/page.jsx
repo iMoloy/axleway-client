@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
@@ -18,15 +18,17 @@ function getTodayString() {
   return new Date().toISOString().split("T")[0];
 }
 
-// How many days between two YYYY-MM-DD strings
+// How many days between two YYYY-MM-DD strings (same day = 1 day)
 function calcDays(start, end) {
   if (!start || !end) return 0;
+  if (start === end) return 1;
   const diffMs = new Date(end) - new Date(start);
-  return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+  return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
 }
 
 export default function CarDetailsPage() {
   const params = useParams();
+  const router = useRouter();
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -96,8 +98,9 @@ export default function CarDetailsPage() {
         method: "POST",
         body: JSON.stringify(booking),
       });
-      toast.success("Booking created successfully");
+      toast.success("Booking confirmed! Redirecting to your bookings…");
       setBookingOpen(false);
+      setTimeout(() => router.push("/my-bookings"), 1500);
     } catch (error) {
       toast.error(error.message || "Could not create booking");
     } finally {
@@ -215,8 +218,8 @@ export default function CarDetailsPage() {
                       value={startDate}
                       onChange={(e) => {
                         setStartDate(e.target.value);
-                        // Reset end date if it's before the new start date
-                        if (endDate && e.target.value >= endDate) {
+                        // Reset end date only if it's before the new start date
+                        if (endDate && e.target.value > endDate) {
                           setEndDate("");
                         }
                       }}

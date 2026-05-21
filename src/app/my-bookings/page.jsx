@@ -90,10 +90,10 @@ export default function MyBookingsPage() {
 
         {bookings.length ? (
           <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm">
-            <div className="hidden grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr_0.8fr] gap-4 border-b border-[var(--line)] bg-[var(--panel-soft)] px-5 py-4 text-sm font-black md:grid">
+            <div className="hidden grid-cols-[1.4fr_0.8fr_1.1fr_0.7fr_0.8fr] gap-4 border-b border-[var(--line)] bg-[var(--panel-soft)] px-5 py-4 text-sm font-black md:grid">
               <span>Car</span>
               <span>Total Price</span>
-              <span>Booking Date</span>
+              <span>Rental Period</span>
               <span>Driver</span>
               <span className="text-right">Action</span>
             </div>
@@ -102,7 +102,7 @@ export default function MyBookingsPage() {
               {bookings.map((booking) => (
                 <article
                   key={booking._id || booking.id}
-                  className="grid gap-4 px-5 py-5 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr_0.8fr] md:items-center"
+                  className="grid gap-4 px-5 py-5 md:grid-cols-[1.4fr_0.8fr_1.1fr_0.7fr_0.8fr] md:items-center"
                 >
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -130,11 +130,24 @@ export default function MyBookingsPage() {
 
                   <div>
                     <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--muted)] md:hidden">
-                      Booking Date
+                      Rental Period
                     </p>
-                    <p className="font-bold">
-                      {formatDate(booking.bookingDate)}
-                    </p>
+                    {booking.startDate && booking.endDate ? (
+                      <div>
+                        <p className="font-bold text-sm">
+                          {formatDate(booking.startDate)} →{" "}
+                          {formatDate(booking.endDate)}
+                        </p>
+                        <p className="mt-0.5 text-xs text-[var(--muted)]">
+                          {booking.rentalDays} day
+                          {booking.rentalDays > 1 ? "s" : ""}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="font-bold text-sm text-[var(--muted)]">
+                        {formatDate(booking.bookingDate)}
+                      </p>
+                    )}
                   </div>
 
                   <div>
