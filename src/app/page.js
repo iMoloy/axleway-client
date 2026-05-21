@@ -68,18 +68,17 @@ export default function HomePage() {
     async function loadStats() {
       try {
         const cars = await apiFetch("/cars");
-        // Count total cars
         const carCount = cars.length;
-        // Count unique pickup locations (cities)
-        const uniqueCities = new Set(cars.map((c) => c.location?.split(",")[0]?.trim()));
+        const uniqueCities = new Set(
+          cars.map((c) => c.location?.split(",")[0]?.trim()),
+        );
         setStats({ carCount, cityCount: uniqueCities.size });
       } catch {
-        // If API fails, keep default 0 — no crash
+        // keep defaults on error
       }
     }
     loadStats();
   }, []);
-
 
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);

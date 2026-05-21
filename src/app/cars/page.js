@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 
 const ITEMS_PER_PAGE = 6;
@@ -20,18 +21,59 @@ const controlClass =
   "h-12 rounded-md border border-[var(--line)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 
 export default function CarsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Initial state comes from URL so shared/bookmarked links work
+  const [searchInput, setSearchInput] = useState(
+    searchParams.get("search") || "",
+  );
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [type, setType] = useState(searchParams.get("type") || "All");
+  const [availability, setAvailability] = useState(
+    searchParams.get("availability") || "All",
+  );
+
   const [cars, setCars] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState("");
-  const [type, setType] = useState("All");
-  const [availability, setAvailability] = useState("All");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const debounceTimer = useRef(null);
+
+  // Keep the URL in sync with current filters
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (type !== "All") params.set("type", type);
+    if (availability !== "All") params.set("availability", availability);
+
+    const newUrl = params.toString() ? `?${params.toString()}` : "/cars";
+    router.replace(newUrl, { scroll: false });
+  }, [search, type, availability]);
+
+  // Search after 500ms of no typing (debounce)
+  const handleSearchInput = (event) => {
+    const value = event.target.value;
+    setSearchInput(value);
+
+    clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => {
+      setSearch(value);
+    }, 500);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    clearTimeout(debounceTimer.current);
+    setSearch(searchInput);
+  };
+
+  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, type, availability]);
 
+  // Fetch cars from API whenever search or type changes
   useEffect(() => {
     let ignore = false;
 
@@ -47,27 +89,17 @@ export default function CarsPage() {
           setCars(Array.isArray(data) ? data : []);
         }
       } catch {
-        if (!ignore) {
-          setCars([]);
-        }
+        if (!ignore) setCars([]);
       } finally {
-        if (!ignore) {
-          setLoading(false);
-        }
+        if (!ignore) setLoading(false);
       }
     }
 
     loadCars();
-
     return () => {
       ignore = true;
     };
   }, [search, type]);
-
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    setSearch(searchInput);
-  };
 
   const filteredCars = useMemo(() => {
     return cars.filter((car) => {
@@ -115,13 +147,29 @@ export default function CarsPage() {
         onSubmit={handleSearchSubmit}
         className="mb-8 grid gap-3 rounded-lg border border-[var(--line)] bg-[var(--panel-soft)] p-4 md:grid-cols-[1fr_120px_190px_190px]"
       >
-        <input
-          className={controlClass}
-          placeholder="Search by car name"
-          type="search"
-          value={searchInput}
-          onChange={(event) => setSearchInput(event.target.value)}
-        />
+        <div className="relative">
+          <input
+            className={`${controlClass} w-full pr-10`}
+            placeholder="Search by car name"
+            type="text"
+            value={searchInput}
+            onChange={handleSearchInput}
+          />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchInput("");
+                setSearch("");
+                clearTimeout(debounceTimer.current);
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--foreground)] transition"
+              aria-label="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
         <button
           type="submit"
           className="h-12 rounded-md bg-[var(--accent)] px-4 text-sm font-bold text-white transition hover:bg-[var(--accent-dark)]"

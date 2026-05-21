@@ -48,7 +48,6 @@ export default function LoginPage() {
       else toast.success("Google login successful");
       router.push("/");
     } catch (err) {
-      console.error("Google login error:", err);
       toast.error(err.message || "Google login failed");
     } finally {
       setLoading(false);

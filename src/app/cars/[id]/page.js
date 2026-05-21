@@ -13,12 +13,12 @@ const textareaClass =
   "mt-2 min-h-28 w-full rounded-md border border-[var(--line)] bg-white px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
-// Get today's date in YYYY-MM-DD format (for min date on inputs)
+// Returns today as YYYY-MM-DD for the date input min attribute
 function getTodayString() {
   return new Date().toISOString().split("T")[0];
 }
 
-// Calculate number of days between two date strings
+// How many days between two YYYY-MM-DD strings
 function calcDays(start, end) {
   if (!start || !end) return 0;
   const diffMs = new Date(end) - new Date(start);
@@ -32,7 +32,6 @@ export default function CarDetailsPage() {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
 
-  // Date state for the booking form
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -95,7 +94,7 @@ export default function CarDetailsPage() {
       setBookingLoading(true);
       await apiFetch("/bookings", {
         method: "POST",
-        body: JSON.stringify(booking)
+        body: JSON.stringify(booking),
       });
       toast.success("Booking created successfully");
       setBookingOpen(false);
@@ -118,7 +117,9 @@ export default function CarDetailsPage() {
     return (
       <section className="container flex min-h-[60vh] flex-col items-center justify-center py-12 text-center">
         <h1 className="text-3xl font-bold">Car not found</h1>
-        <p className="mt-3 text-[var(--muted)]">This listing may be unavailable or still loading from the database.</p>
+        <p className="mt-3 text-[var(--muted)]">
+          This listing may be unavailable or still loading from the database.
+        </p>
         <Link className="primary-button mt-6" href="/cars">
           Back to Cars
         </Link>
@@ -128,26 +129,37 @@ export default function CarDetailsPage() {
 
   return (
     <section className="container py-12 md:py-16">
-      <Link className="text-sm font-bold text-[var(--accent)] hover:underline" href="/cars">
+      <Link
+        className="text-sm font-bold text-[var(--accent)] hover:underline"
+        href="/cars"
+      >
         ← Back to Explore Cars
       </Link>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_420px]">
         <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-sm">
-          <img className="h-[320px] w-full rounded-md object-cover md:h-[520px]" src={car.image} alt={car.name} />
+          <img
+            className="h-[320px] w-full rounded-md object-cover md:h-[520px]"
+            src={car.image}
+            alt={car.name}
+          />
         </div>
 
         <aside className="rounded-lg border border-[var(--line)] bg-white p-6 shadow-sm flex flex-col justify-between">
           <div>
-            <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${
-              car.availability === "Available"
-                ? "bg-emerald-50 text-emerald-600"
-                : "bg-red-50 text-red-600"
-            }`}>
+            <span
+              className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${
+                car.availability === "Available"
+                  ? "bg-emerald-50 text-emerald-600"
+                  : "bg-red-50 text-red-600"
+              }`}
+            >
               {car.availability}
             </span>
             <h1 className="mt-4 text-3xl font-black">{car.name}</h1>
-            <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{car.description}</p>
+            <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+              {car.description}
+            </p>
 
             <div className="mt-6 grid gap-3 text-sm">
               <DetailRow label="Type" value={car.type} />
@@ -170,7 +182,10 @@ export default function CarDetailsPage() {
       {bookingOpen ? (
         <PrivateRoute>
           <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4 backdrop-blur-sm">
-            <form className="w-full max-w-lg rounded-lg border border-[var(--line)] bg-white p-6 shadow-2xl" onSubmit={handleBooking}>
+            <form
+              className="w-full max-w-lg rounded-lg border border-[var(--line)] bg-white p-6 shadow-2xl"
+              onSubmit={handleBooking}
+            >
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
@@ -223,7 +238,12 @@ export default function CarDetailsPage() {
                 {/* Driver Needed */}
                 <label className={labelClass}>
                   Driver Needed
-                  <select required className={inputClass} defaultValue="No" name="driverNeeded">
+                  <select
+                    required
+                    className={inputClass}
+                    defaultValue="No"
+                    name="driverNeeded"
+                  >
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
                   </select>
@@ -244,7 +264,9 @@ export default function CarDetailsPage() {
                   {calcDays(startDate, endDate) > 0 ? (
                     <div className="flex items-center justify-between">
                       <span>
-                        {calcDays(startDate, endDate)} day{calcDays(startDate, endDate) > 1 ? "s" : ""} × ${car.price}/day
+                        {calcDays(startDate, endDate)} day
+                        {calcDays(startDate, endDate) > 1 ? "s" : ""} × $
+                        {car.price}/day
                       </span>
                       <span className="text-base font-black">
                         ${calcDays(startDate, endDate) * car.price}
@@ -255,7 +277,6 @@ export default function CarDetailsPage() {
                   )}
                 </div>
 
-                
                 <button
                   type="submit"
                   disabled={bookingLoading}
