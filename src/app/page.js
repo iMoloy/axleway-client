@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AvailableCarsPreview } from "@/components/AvailableCarsPreview";
+import { apiFetch } from "@/lib/api";
 
 const renterBenefits = [
   {
@@ -60,6 +61,26 @@ const faqs = [
 export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
 
+  // Dynamic stats from the database
+  const [stats, setStats] = useState({ carCount: 0, cityCount: 0 });
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const cars = await apiFetch("/cars");
+        // Count total cars
+        const carCount = cars.length;
+        // Count unique pickup locations (cities)
+        const uniqueCities = new Set(cars.map((c) => c.location?.split(",")[0]?.trim()));
+        setStats({ carCount, cityCount: uniqueCities.size });
+      } catch {
+        // If API fails, keep default 0 — no crash
+      }
+    }
+    loadStats();
+  }, []);
+
+
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);
   };
@@ -101,10 +122,12 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              {/* Stats Row */}
+              {/* Stats Row — numbers come from the live database */}
               <div className="mt-12 flex flex-wrap gap-8 border-t border-[var(--line)] pt-8">
                 <div>
-                  <p className="text-2xl font-black">20+</p>
+                  <p className="text-2xl font-black">
+                    {stats.carCount > 0 ? `${stats.carCount}+` : "…"}
+                  </p>
                   <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                     Verified Cars
                   </p>
@@ -116,7 +139,9 @@ export default function HomePage() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-2xl font-black">6+</p>
+                  <p className="text-2xl font-black">
+                    {stats.cityCount > 0 ? `${stats.cityCount}+` : "…"}
+                  </p>
                   <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                     Major Cities
                   </p>
