@@ -13,12 +13,28 @@ const textareaClass =
   "mt-2 min-h-28 w-full rounded-md border border-[var(--line)] bg-white px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
+// Get today's date in YYYY-MM-DD format (for min date on inputs)
+function getTodayString() {
+  return new Date().toISOString().split("T")[0];
+}
+
+// Calculate number of days between two date strings
+function calcDays(start, end) {
+  if (!start || !end) return 0;
+  const diffMs = new Date(end) - new Date(start);
+  return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+}
+
 export default function CarDetailsPage() {
   const params = useParams();
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
+
+  // Date state for the booking form
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     let ignore = false;
@@ -54,13 +70,25 @@ export default function CarDetailsPage() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
+    const days = calcDays(startDate, endDate);
+
+    if (!startDate || !endDate) {
+      return toast.error("Please select a start and end date.");
+    }
+    if (days < 1) {
+      return toast.error("End date must be after the start date.");
+    }
+
     const booking = {
       carId: car._id || car.id,
       carName: car.name,
       carType: car.type,
-      totalPrice: Number(car.price),
+      startDate,
+      endDate,
+      rentalDays: days,
+      totalPrice: days * Number(car.price),
       driverNeeded: formData.get("driverNeeded"),
-      note: formData.get("note")
+      note: formData.get("note"),
     };
 
     try {
@@ -160,6 +188,39 @@ export default function CarDetailsPage() {
               </div>
 
               <div className="mt-6 space-y-5">
+                {/* Date Range */}
+                <div className="grid grid-cols-2 gap-4">
+                  <label className={labelClass}>
+                    Start Date
+                    <input
+                      required
+                      type="date"
+                      className={inputClass}
+                      min={getTodayString()}
+                      value={startDate}
+                      onChange={(e) => {
+                        setStartDate(e.target.value);
+                        // Reset end date if it's before the new start date
+                        if (endDate && e.target.value >= endDate) {
+                          setEndDate("");
+                        }
+                      }}
+                    />
+                  </label>
+                  <label className={labelClass}>
+                    End Date
+                    <input
+                      required
+                      type="date"
+                      className={inputClass}
+                      min={startDate || getTodayString()}
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </label>
+                </div>
+
+                {/* Driver Needed */}
                 <label className={labelClass}>
                   Driver Needed
                   <select required className={inputClass} defaultValue="No" name="driverNeeded">
@@ -167,6 +228,8 @@ export default function CarDetailsPage() {
                     <option value="Yes">Yes</option>
                   </select>
                 </label>
+
+                {/* Note */}
                 <label className={labelClass}>
                   Special Note
                   <textarea
@@ -175,9 +238,23 @@ export default function CarDetailsPage() {
                     placeholder="Pickup time, trip plan, luggage, or driver preference."
                   />
                 </label>
-                <div className="rounded-md bg-[var(--accent-soft)] p-4 text-sm font-bold text-[var(--accent)]">
-                  Estimated total: ${car.price} for one day
+
+                {/* Price Summary */}
+                <div className="rounded-md bg-[var(--accent-soft)] p-4 text-sm text-[var(--accent)]">
+                  {calcDays(startDate, endDate) > 0 ? (
+                    <div className="flex items-center justify-between">
+                      <span>
+                        {calcDays(startDate, endDate)} day{calcDays(startDate, endDate) > 1 ? "s" : ""} × ${car.price}/day
+                      </span>
+                      <span className="text-base font-black">
+                        ${calcDays(startDate, endDate) * car.price}
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="font-bold">Select dates to see total price</p>
+                  )}
                 </div>
+
                 
                 <button
                   type="submit"
