@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
@@ -151,7 +152,9 @@ export default function MyAddedCarsPage() {
                 key={car._id || car.id}
                 className="grid overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm sm:grid-cols-[210px_1fr]"
               >
-                <img
+                <Image
+                  width={300}
+                  height={300}
                   className="h-56 w-full object-cover sm:h-full"
                   src={car.image}
                   alt={car.name}

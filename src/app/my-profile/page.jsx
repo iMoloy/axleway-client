@@ -5,6 +5,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { apiFetch } from "@/lib/api";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { toast } from "react-toastify";
 
 export default function MyProfilePage() {
@@ -116,7 +117,9 @@ export default function MyProfilePage() {
             <div className="flex flex-col items-center text-center">
               <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-[var(--accent-soft)] text-3xl font-black text-[var(--accent-dark)]">
                 {user.photoURL ? (
-                  <img
+                  <Image
+                    width={96}
+                    height={96}
                     className="h-full w-full object-cover"
                     src={user.photoURL}
                     alt={user.displayName}

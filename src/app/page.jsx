@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { AvailableCarsPreview } from "@/components/AvailableCarsPreview";
 import { apiFetch } from "@/lib/api";
@@ -90,7 +92,11 @@ export default function HomePage() {
         <div className="container py-20 md:py-28">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             {/* Left: Text content */}
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--accent-soft)] bg-[var(--accent-soft)] px-4 py-1.5">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--accent)]" />
                 <span className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
@@ -107,13 +113,13 @@ export default function HomePage() {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link
-                  className="rounded-md bg-[var(--accent)] px-6 py-3.5 text-sm font-bold !text-white shadow-md shadow-blue-500/10 transition hover:bg-[var(--accent-dark)]"
+                  className="rounded-md bg-[var(--accent)] px-6 py-3.5 text-sm font-bold !text-white shadow-md shadow-blue-500/10 transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
                   href="/cars"
                 >
                   Explore Cars →
                 </Link>
                 <Link
-                  className="rounded-md border border-[var(--inverted-bg)] bg-[var(--inverted-bg)] px-6 py-3.5 text-sm font-bold !text-[var(--inverted-fg)] transition hover:opacity-90"
+                  className="rounded-md border border-[var(--inverted-bg)] bg-[var(--inverted-bg)] px-6 py-3.5 text-sm font-bold !text-[var(--inverted-fg)] transition hover:opacity-90 hover:scale-105 active:scale-95"
                   href="/add-car"
                 >
                   List Your Car
@@ -145,28 +151,41 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right: Car image */}
-            <div className="relative pb-6 md:pb-8">
+            <motion.div
+              className="relative pb-6 md:pb-8"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-xl">
-                <img
+                <Image
+                  width={1200}
+                  height={800}
                   className="h-52 w-full rounded-md object-cover md:h-[400px]"
                   src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80"
                   alt="Premium car rental"
+                  priority
                 />
               </div>
 
               {/* Floating Price Badge — hidden on small screens */}
-              <div className="hidden md:block absolute -bottom-4 -left-4 rounded-md border border-[var(--line)] bg-white p-4 shadow-lg">
+              <motion.div
+                className="hidden md:block absolute -bottom-4 -left-4 rounded-md border border-[var(--line)] bg-white p-4 shadow-lg"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
                 <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                   Premium Fleet
                 </p>
                 <p className="mt-1 text-lg font-black text-[var(--accent)]">
                   From $35/day
                 </p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -141,10 +142,13 @@ export default function CarDetailsPage() {
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_420px]">
         <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-sm">
-          <img
+          <Image
+            width={1000}
+            height={600}
             className="h-[320px] w-full rounded-md object-cover md:h-[520px]"
             src={car.image}
             alt={car.name}
+            priority
           />
         </div>
 

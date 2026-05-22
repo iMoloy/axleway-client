@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/react";
@@ -145,10 +146,12 @@ export function Navbar() {
                 onClick={() => setMenuOpen((current) => !current)}
               >
                 {/* Avatar with online dot */}
-                <div className="relative">
+                <span className="relative inline-block">
                   <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-sm bg-[var(--accent-soft)] text-xs font-black text-[var(--accent)]">
                     {user.photoURL ? (
-                      <img
+                      <Image
+                        width={32}
+                        height={32}
                         className="h-full w-full object-cover"
                         src={user.photoURL}
                         alt={user.displayName || user.email}
@@ -160,7 +163,7 @@ export function Navbar() {
                     )}
                   </span>
                   <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-black bg-emerald-400" />
-                </div>
+                </span>
                 <span className="hidden max-w-28 truncate text-sm font-bold sm:block text-white">
                   {user.displayName || user.email?.split("@")[0]}
                 </span>

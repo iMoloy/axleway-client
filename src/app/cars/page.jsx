@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
@@ -226,7 +227,9 @@ export default function CarsPage() {
                 className="group flex flex-col overflow-hidden rounded-lg border border-[var(--line)] bg-white shadow-sm transition hover:shadow-md"
               >
                 <div className="overflow-hidden">
-                  <img
+                  <Image
+                    width={400}
+                    height={300}
                     className="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
                     src={car.image}
                     alt={car.name}

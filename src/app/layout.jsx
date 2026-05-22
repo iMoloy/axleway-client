@@ -10,8 +10,10 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata = {
-  title: "AxleWay",
-  description: "A premium car rental platform for assignment CAT_05",
+  title: "AxleWay | Premium Car Rental Platform",
+  description:
+    "Rent verified cars or host your own vehicle. AxleWay connects trusted owners with verified renters for a seamless car rental experience.",
+  keywords: ["car rental", "rent a car", "host a car", "AxleWay"],
 };
 
 export default function RootLayout({ children }) {
