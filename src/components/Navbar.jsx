@@ -116,8 +116,12 @@ export function Navbar() {
           <button
             onClick={toggleTheme}
             type="button"
-            className="grid h-10 w-10 place-items-center rounded-md border border-white/10 bg-white/5 text-lg transition hover:bg-white/10 cursor-pointer"
             aria-label="Toggle theme mode"
+            style={theme === "dark"
+              ? { backgroundColor: "#18181b", border: "1px solid #3f3f46", color: "#f4f4f5" }
+              : { backgroundColor: "#ffffff", border: "1px solid #e4e4e7", color: "#09090b" }
+            }
+            className="h-9 w-9 rounded-full text-sm transition-all duration-200 cursor-pointer hover:opacity-80"
           >
             {theme === "dark" ? "☀️" : "🌙"}
           </button>
@@ -212,7 +216,7 @@ export function Navbar() {
               ) : null}
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <Button
                 as={Link}
                 color="primary"
@@ -227,7 +231,8 @@ export function Navbar() {
               <Button
                 as={Link}
                 href="/register"
-                className="font-bold rounded-md border border-[var(--line)] bg-[var(--panel)] text-[var(--foreground)] hover:bg-[var(--panel-soft)]"
+                className="font-bold rounded-md border"
+                style={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#09090b" }}
                 size="sm"
                 variant="solid"
                 radius="sm"
@@ -262,7 +267,8 @@ export function Navbar() {
                 Login
               </Link>
               <Link
-                className="block w-full rounded-md border border-[var(--line)] bg-[var(--panel)] py-3 text-center text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--panel-soft)]"
+                className="block w-full rounded-md border py-3 text-center text-sm font-bold transition"
+                style={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#09090b" }}
                 href="/register"
                 onClick={closeMenus}
               >

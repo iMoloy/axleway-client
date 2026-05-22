@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #09090b;
@@ -19,6 +21,10 @@
 
   --ink: #09090b;
   --line: #e4e4e7;
+
+  --inverted-bg: #09090b;
+  --inverted-fg: #ffffff;
+  --inverted-hover: #27272a;
 }
 
 .dark {
@@ -40,6 +46,10 @@
 
   --ink: #09090b;
   --line: #27272a;
+
+  --inverted-bg: #ffffff;
+  --inverted-fg: #09090b;
+  --inverted-hover: #e4e4e7;
 }
 
 /* Dark mode utility overrides for hardcoded classes */

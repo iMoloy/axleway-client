@@ -60,7 +60,6 @@ const faqs = [
 
 export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
-
   // Dynamic stats from the database
   const [stats, setStats] = useState({ carCount: 0, cityCount: 0 });
 
@@ -114,7 +113,7 @@ export default function HomePage() {
                   Explore Cars →
                 </Link>
                 <Link
-                  className="rounded-md border border-[var(--line)] bg-white px-6 py-3.5 text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--panel-soft)]"
+                  className="rounded-md border border-[var(--inverted-bg)] bg-[var(--inverted-bg)] px-6 py-3.5 text-sm font-bold !text-[var(--inverted-fg)] transition hover:opacity-90"
                   href="/add-car"
                 >
                   List Your Car
@@ -149,17 +148,17 @@ export default function HomePage() {
             </div>
 
             {/* Right: Car image */}
-            <div className="relative">
+            <div className="relative pb-6 md:pb-8">
               <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-xl">
                 <img
-                  className="h-[400px] w-full rounded-md object-cover"
+                  className="h-52 w-full rounded-md object-cover md:h-[400px]"
                   src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80"
                   alt="Premium car rental"
                 />
               </div>
 
-              {/* Floating Price Badge */}
-              <div className="absolute -bottom-4 -left-4 rounded-md border border-[var(--line)] bg-white p-4 shadow-lg">
+              {/* Floating Price Badge — hidden on small screens */}
+              <div className="hidden md:block absolute -bottom-4 -left-4 rounded-md border border-[var(--line)] bg-white p-4 shadow-lg">
                 <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                   Premium Fleet
                 </p>
