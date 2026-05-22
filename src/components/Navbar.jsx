@@ -25,6 +25,29 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTheme(savedTheme);
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -89,6 +112,16 @@ export function Navbar() {
 
         {/* Auth / Mobile Toggle */}
         <div className="flex items-center gap-3">
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            type="button"
+            className="grid h-10 w-10 place-items-center rounded-md border border-white/10 bg-white/5 text-lg transition hover:bg-white/10 cursor-pointer"
+            aria-label="Toggle theme mode"
+          >
+            {theme === "dark" ? "☀️" : "🌙"}
+          </button>
+
           {!user && (
             <button
               className="grid h-10 w-10 place-items-center rounded-md border border-white/10 bg-white/5 text-lg font-black transition-colors hover:bg-white/10 md:hidden"
@@ -194,7 +227,7 @@ export function Navbar() {
               <Button
                 as={Link}
                 href="/register"
-                className="font-bold rounded-md border border-[var(--line)] bg-white !text-black hover:bg-[var(--panel-soft)]"
+                className="font-bold rounded-md border border-[var(--line)] bg-[var(--panel)] text-[var(--foreground)] hover:bg-[var(--panel-soft)]"
                 size="sm"
                 variant="solid"
                 radius="sm"
@@ -229,7 +262,7 @@ export function Navbar() {
                 Login
               </Link>
               <Link
-                className="block w-full rounded-md border border-[var(--line)] bg-white py-3 text-center text-sm font-bold !text-black transition hover:bg-[var(--panel-soft)]"
+                className="block w-full rounded-md border border-[var(--line)] bg-[var(--panel)] py-3 text-center text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--panel-soft)]"
                 href="/register"
                 onClick={closeMenus}
               >

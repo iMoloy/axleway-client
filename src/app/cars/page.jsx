@@ -49,7 +49,7 @@ export default function CarsPage() {
 
     const newUrl = params.toString() ? `?${params.toString()}` : "/cars";
     router.replace(newUrl, { scroll: false });
-  }, [search, type, availability]);
+  }, [search, type, availability, router]);
 
   // Search after 500ms of no typing (debounce)
   const handleSearchInput = (event) => {
@@ -59,6 +59,7 @@ export default function CarsPage() {
     clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
       setSearch(value);
+      setCurrentPage(1);
     }, 500);
   };
 
@@ -66,12 +67,8 @@ export default function CarsPage() {
     event.preventDefault();
     clearTimeout(debounceTimer.current);
     setSearch(searchInput);
-  };
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
     setCurrentPage(1);
-  }, [search, type, availability]);
+  };
 
   // Fetch cars from API whenever search or type changes
   useEffect(() => {
@@ -161,6 +158,7 @@ export default function CarsPage() {
               onClick={() => {
                 setSearchInput("");
                 setSearch("");
+                setCurrentPage(1);
                 clearTimeout(debounceTimer.current);
               }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--foreground)] transition"
@@ -179,7 +177,10 @@ export default function CarsPage() {
         <select
           className={controlClass}
           value={type}
-          onChange={(event) => setType(event.target.value)}
+          onChange={(event) => {
+            setType(event.target.value);
+            setCurrentPage(1);
+          }}
         >
           {carTypes.map((option) => (
             <option key={option} value={option}>
@@ -190,7 +191,10 @@ export default function CarsPage() {
         <select
           className={controlClass}
           value={availability}
-          onChange={(event) => setAvailability(event.target.value)}
+          onChange={(event) => {
+            setAvailability(event.target.value);
+            setCurrentPage(1);
+          }}
         >
           {availabilityOptions.map((option) => (
             <option key={option} value={option}>

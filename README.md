@@ -33,6 +33,7 @@ AxleWay is a premium, full-stack peer-to-peer car sharing marketplace. Built wit
 * **Smooth Footer & Transitions:** Useful Links feature hover-offset transitions with fading direction arrows at the end of the text.
 * **Interactive FAQ Accordion:** Interactive React-state Accordion FAQ blocks on the homepage.
 * **Trust & Safety Row:** Key indicators row displaying Trust badges (Verified Listings, Secure Renting, Direct Notes, Support).
+* **Interactive Light/Dark Mode:** A persistent theme toggling button in the navigation header syncing preferences with local storage and updating custom CSS properties instantly.
 
 ---
 
