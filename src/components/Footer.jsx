@@ -15,7 +15,7 @@ export function Footer() {
             </p>
           </div>
           <Link
-            className="inline-block rounded-md bg-[var(--accent)] px-6 py-3 text-center text-xs font-bold !text-white transition hover:bg-[var(--accent-dark)]"
+            className="inline-block rounded-md bg-[var(--accent)] px-6 py-3 text-center text-xs font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
             href="/cars"
           >
             Explore Fleet →
@@ -133,7 +133,7 @@ export function Footer() {
               <a
                 href="#"
                 aria-label="Facebook"
-                className="flex h-8 w-8 items-center justify-center rounded-md bg-white/5 border border-white/10 text-white/80 transition hover:bg-[var(--accent)] hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-md bg-white/5 border border-white/10 text-white/80 transition hover:bg-[var(--accent)] hover:text-white hover:scale-110 active:scale-95"
               >
                 <svg
                   className="h-4 w-4"
@@ -148,7 +148,7 @@ export function Footer() {
               <a
                 href="#"
                 aria-label="Instagram"
-                className="flex h-8 w-8 items-center justify-center rounded-md bg-white/5 border border-white/10 text-white/80 transition hover:bg-[var(--accent)] hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-md bg-white/5 border border-white/10 text-white/80 transition hover:bg-[var(--accent)] hover:text-white hover:scale-110 active:scale-95"
               >
                 <svg
                   className="h-4 w-4"
@@ -163,7 +163,7 @@ export function Footer() {
               <a
                 href="#"
                 aria-label="X"
-                className="flex h-8 w-8 items-center justify-center rounded-md bg-white/5 border border-white/10 text-white/80 transition hover:bg-[var(--accent)] hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-md bg-white/5 border border-white/10 text-white/80 transition hover:bg-[var(--accent)] hover:text-white hover:scale-110 active:scale-95"
               >
                 <svg
                   className="h-3 w-3"

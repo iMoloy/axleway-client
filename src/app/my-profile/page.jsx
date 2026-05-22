@@ -238,7 +238,7 @@ export default function MyProfilePage() {
               <button
                 type="submit"
                 disabled={editLoading}
-                className="primary-button !rounded-md !min-h-[40px] px-6 !text-sm"
+                className="primary-button !rounded-md !min-h-[40px] px-6 !text-sm transition hover:scale-105 active:scale-95 disabled:hover:scale-100"
               >
                 {editLoading ? "Saving..." : "Save Changes"}
               </button>

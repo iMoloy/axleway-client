@@ -96,7 +96,7 @@ export function AvailableCarsPreview() {
                     </span>
                   </div>
                   <Link
-                    className="mt-5 rounded-md bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)]"
+                    className="mt-5 rounded-md bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
                     href={`/cars/${car._id || car.id}`}
                   >
                     View Details

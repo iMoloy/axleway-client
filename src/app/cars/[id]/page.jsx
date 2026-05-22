@@ -179,7 +179,7 @@ export default function CarDetailsPage() {
           <button
             onClick={() => setBookingOpen(true)}
             disabled={car.availability !== "Available"}
-            className="mt-8 w-full rounded-md bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-50 disabled:hover:bg-[var(--accent)]"
+            className="mt-8 w-full rounded-md bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-[var(--accent)]"
           >
             Book Now
           </button>
@@ -287,7 +287,7 @@ export default function CarDetailsPage() {
                 <button
                   type="submit"
                   disabled={bookingLoading}
-                  className="w-full rounded-md bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-60"
+                  className="w-full rounded-md bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95 disabled:opacity-60 disabled:hover:scale-100"
                 >
                   {bookingLoading ? "Confirming…" : "Confirm Booking"}
                 </button>

@@ -246,7 +246,7 @@ export default function AddCarPage() {
 
           <div className="flex flex-col gap-3 md:col-span-2 md:flex-row md:justify-end">
             <Button
-              className="font-bold"
+              className="font-bold transition hover:scale-105 active:scale-95"
               type="reset"
               variant="bordered"
               radius="sm"
@@ -254,8 +254,7 @@ export default function AddCarPage() {
               Clear Form
             </Button>
             <Button
-              className="font-bold"
-              color="primary"
+              className="font-bold bg-[var(--accent)] hover:bg-[var(--accent-dark)] !text-white transition hover:scale-105 active:scale-95"
               isLoading={loading}
               type="submit"
               radius="sm"

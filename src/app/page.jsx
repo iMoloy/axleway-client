@@ -9,7 +9,7 @@ import { apiFetch } from "@/lib/api";
 
 const heroImages = [
   "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920&q=80", // White sports car
-  "https://images.unsplash.com/photo-1503376712344-659f71d54153?auto=format&fit=crop&w=1920&q=80", // Yellow sports car
+  "https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1920&q=80", // Red car (working)
   "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1920&q=80", // White modern car
 ];
 
@@ -153,13 +153,13 @@ export default function HomePage() {
             
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Link
-                className="rounded-md bg-[var(--accent)] px-8 py-4 text-sm font-bold !text-white shadow-xl shadow-blue-500/20 transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
+                className="rounded-md bg-[var(--accent)] px-8 py-4 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
                 href="/cars"
               >
                 Explore Cars →
               </Link>
               <Link
-                className="rounded-md border border-white bg-white px-8 py-4 text-sm font-bold text-black shadow-xl transition hover:bg-gray-100 hover:scale-105 active:scale-95"
+                className="rounded-md border border-white bg-white px-8 py-4 text-sm font-bold text-black transition hover:bg-gray-100 hover:scale-105 active:scale-95"
                 href="/add-car"
               >
                 List Your Car

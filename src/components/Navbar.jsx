@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/providers/AuthProvider";
 
 const navLinks = [
@@ -104,7 +105,7 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`font-bold transition-colors ${item.special ? "rounded-md bg-[var(--accent)] px-4 py-2 !text-white hover:bg-[var(--accent-dark)]" : "relative text-white/60 hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[var(--accent)] after:transition-all after:duration-300 hover:after:w-full"} ${pathname === item.href && !item.special ? "text-white after:w-full" : ""}`}
+                className={`font-bold transition-all duration-200 ${item.special ? "rounded-md bg-[var(--accent)] px-4 py-2 !text-white hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95" : "relative text-white/60 hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[var(--accent)] after:transition-all after:duration-300 hover:after:w-full"} ${pathname === item.href && !item.special ? "text-white after:w-full" : ""}`}
               >
                 {item.label}
               </Link>
@@ -164,8 +165,10 @@ export function Navbar() {
                   </span>
                   <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-black bg-emerald-400" />
                 </span>
-                <span className="hidden max-w-28 truncate text-sm font-bold sm:block text-white">
-                  {user.displayName || user.email?.split("@")[0]}
+                <span className="hidden max-w-20 truncate text-sm font-bold sm:block text-white" title={user.displayName || user.email?.split("@")[0]}>
+                  {(user.displayName || user.email?.split("@")[0] || "User").length > 7
+                    ? (user.displayName || user.email?.split("@")[0]).slice(0, 7) + ".."
+                    : (user.displayName || user.email?.split("@")[0])}
                 </span>
                 <span className="text-[10px] text-white/40">▼</span>
               </button>
@@ -173,8 +176,8 @@ export function Navbar() {
               {menuOpen ? (
                 <div className="absolute right-0 mt-2 w-56 rounded-md border border-white/10 bg-black p-1 shadow-2xl">
                   <div className="border-b border-white/10 px-3 py-2 mb-1">
-                    <p className="truncate text-sm font-bold text-white">
-                      {user.displayName || "User"}
+                    <p className="truncate text-sm font-bold text-white" title={user.displayName || "User"}>
+                      {user.displayName || user.email?.split("@")[0] || "User"}
                     </p>
                     <p className="truncate text-xs text-white/50">
                       {user.email}
@@ -185,7 +188,7 @@ export function Navbar() {
                     {[...navLinks, ...authNavLinks].map((item) => (
                       <Link
                         key={item.href}
-                        className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/5 hover:text-white"
+                        className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white hover:scale-105 active:scale-95"
                         href={item.href}
                         onClick={() => setMenuOpen(false)}
                       >
@@ -198,7 +201,7 @@ export function Navbar() {
                   {dropdownLinks.map((item) => (
                     <Link
                       key={item.href}
-                      className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/5 hover:text-white"
+                      className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white hover:scale-105 active:scale-95"
                       href={item.href}
                       onClick={() => setMenuOpen(false)}
                     >
@@ -208,7 +211,7 @@ export function Navbar() {
 
                   <div className="mt-1 border-t border-white/10 pt-1">
                     <button
-                      className="w-full rounded-md px-3 py-2 text-left text-sm font-medium text-red-400 hover:bg-red-950/20"
+                      className="w-full rounded-md px-3 py-2 text-left text-sm font-medium text-red-400 transition hover:bg-red-950/20 hover:scale-105 active:scale-95"
                       type="button"
                       onClick={handleLogout}
                     >
@@ -224,7 +227,7 @@ export function Navbar() {
                 as={Link}
                 color="primary"
                 href="/login"
-                className="font-bold rounded-md bg-[var(--accent)] hover:bg-[var(--accent-dark)] !text-white"
+                className="font-bold rounded-md bg-[var(--accent)] hover:bg-[var(--accent-dark)] !text-white transition hover:scale-105 active:scale-95"
                 size="sm"
                 variant="solid"
                 radius="sm"
@@ -234,7 +237,7 @@ export function Navbar() {
               <Button
                 as={Link}
                 href="/register"
-                className="font-bold rounded-md border"
+                className="font-bold rounded-md border transition hover:scale-105 active:scale-95"
                 style={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#09090b" }}
                 size="sm"
                 variant="solid"

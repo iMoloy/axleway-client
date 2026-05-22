@@ -68,7 +68,7 @@ export default function LoginPage() {
           type="button"
           disabled={loading}
           onClick={handleGoogleLogin}
-          className="w-full rounded-md bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-50"
+          className="w-full rounded-md bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95 disabled:opacity-50"
         >
           Continue with Google
         </button>
@@ -107,7 +107,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] disabled:opacity-60"
+            className="w-full rounded-md bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95 disabled:opacity-60"
           >
             {loading ? "Signing in…" : "Login"}
           </button>
