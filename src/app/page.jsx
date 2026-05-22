@@ -2,10 +2,16 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { AvailableCarsPreview } from "@/components/AvailableCarsPreview";
 import { apiFetch } from "@/lib/api";
+
+const heroImages = [
+  "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920&q=80", // White sports car
+  "https://images.unsplash.com/photo-1503376712344-659f71d54153?auto=format&fit=crop&w=1920&q=80", // Yellow sports car
+  "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1920&q=80", // White modern car
+];
 
 const renterBenefits = [
   {
@@ -62,8 +68,19 @@ const faqs = [
 
 export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   // Dynamic stats from the database
   const [stats, setStats] = useState({ carCount: 0, cityCount: 0 });
+
+  useEffect(() => {
+    // Background slider interval
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     async function loadStats() {
@@ -88,105 +105,98 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="border-b border-[var(--line)]">
-        <div className="container py-20 md:py-28">
-          <div className="grid gap-12 md:grid-cols-2 md:items-center">
-            {/* Left: Text content */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--accent-soft)] bg-[var(--accent-soft)] px-4 py-1.5">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--accent)]" />
-                <span className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
-                  Premium Car Rental Platform
-                </span>
-              </div>
-              <h1 className="text-4xl font-black leading-[1.1] tracking-tight md:text-5xl lg:text-6xl">
-                Rent verified cars, <br />
-                or host and earn.
-              </h1>
-              <p className="mt-6 text-base leading-7 text-[var(--muted)] md:text-lg">
-                AxleWay connects trusted owners with verified renters. Explore
-                hundreds of reliable cars or start hosting your own today.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Link
-                  className="rounded-md bg-[var(--accent)] px-6 py-3.5 text-sm font-bold !text-white shadow-md shadow-blue-500/10 transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
-                  href="/cars"
-                >
-                  Explore Cars →
-                </Link>
-                <Link
-                  className="rounded-md border border-[var(--inverted-bg)] bg-[var(--inverted-bg)] px-6 py-3.5 text-sm font-bold !text-[var(--inverted-fg)] transition hover:opacity-90 hover:scale-105 active:scale-95"
-                  href="/add-car"
-                >
-                  List Your Car
-                </Link>
-              </div>
+      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden border-b border-[var(--line)] bg-black">
+        {/* Background Slider */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentImageIndex}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            <img
+              src={heroImages[currentImageIndex]}
+              alt="Hero Background"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            {/* Dark Overlay for readability */}
+            <div className="absolute inset-0 bg-black/65" />
+          </motion.div>
+        </AnimatePresence>
 
-              {/* Stats Row — numbers come from the live database */}
-              <div className="mt-12 flex flex-wrap gap-8 border-t border-[var(--line)] pt-8">
-                <div>
-                  <p className="text-2xl font-black">
-                    {stats.carCount > 0 ? `${stats.carCount}+` : "…"}
-                  </p>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                    Verified Cars
-                  </p>
-                </div>
-                <div>
-                  <p className="text-2xl font-black">100%</p>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                    Trusted Hosts
-                  </p>
-                </div>
-                <div>
-                  <p className="text-2xl font-black">
-                    {stats.cityCount > 0 ? `${stats.cityCount}+` : "…"}
-                  </p>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                    Major Cities
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right: Car image */}
-            <motion.div
-              className="relative pb-6 md:pb-8"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-xl">
-                <Image
-                  width={1200}
-                  height={800}
-                  className="h-52 w-full rounded-md object-cover md:h-[400px]"
-                  src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80"
-                  alt="Premium car rental"
-                  priority
-                />
-              </div>
-
-              {/* Floating Price Badge — hidden on small screens */}
-              <motion.div
-                className="hidden md:block absolute -bottom-4 -left-4 rounded-md border border-[var(--line)] bg-white p-4 shadow-lg"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
+        {/* Foreground Text Content (Centered) */}
+        <div className="container relative z-10 py-20 text-center flex flex-col items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex flex-col items-center max-w-3xl"
+          >
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-4 py-1.5 backdrop-blur-sm">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--accent)]" />
+              <span className="text-xs font-bold uppercase tracking-widest text-[var(--accent)] drop-shadow-md">
+                Premium Car Rental Platform
+              </span>
+            </div>
+            
+            <h1 className="text-4xl font-black leading-[1.1] tracking-tight text-white md:text-5xl lg:text-6xl drop-shadow-lg">
+              Rent verified cars, <br />
+              or host and earn.
+            </h1>
+            
+            <p className="mt-6 text-base leading-7 text-gray-300 md:text-lg drop-shadow-md">
+              AxleWay connects trusted owners with verified renters. Explore
+              hundreds of reliable cars or start hosting your own today.
+            </p>
+            
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                className="rounded-md bg-[var(--accent)] px-8 py-4 text-sm font-bold !text-white shadow-xl shadow-blue-500/20 transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
+                href="/cars"
               >
-                <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                  Premium Fleet
-                </p>
-                <p className="mt-1 text-lg font-black text-[var(--accent)]">
-                  From $35/day
-                </p>
-              </motion.div>
-            </motion.div>
-          </div>
+                Explore Cars →
+              </Link>
+              <Link
+                className="rounded-md border border-white bg-white px-8 py-4 text-sm font-bold text-black shadow-xl transition hover:bg-gray-100 hover:scale-105 active:scale-95"
+                href="/add-car"
+              >
+                List Your Car
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Stats Row — numbers come from the live database */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-16 flex flex-wrap justify-center gap-12 rounded-2xl border border-white/10 bg-black/30 p-8 backdrop-blur-md shadow-2xl"
+          >
+            <div className="text-center">
+              <p className="text-3xl font-black text-white drop-shadow-md">
+                {stats.carCount > 0 ? `${stats.carCount}+` : "…"}
+              </p>
+              <p className="mt-1 text-xs font-bold uppercase tracking-wider text-gray-400">
+                Verified Cars
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-black text-white drop-shadow-md">100%</p>
+              <p className="mt-1 text-xs font-bold uppercase tracking-wider text-gray-400">
+                Trusted Hosts
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-black text-white drop-shadow-md">
+                {stats.cityCount > 0 ? `${stats.cityCount}+` : "…"}
+              </p>
+              <p className="mt-1 text-xs font-bold uppercase tracking-wider text-gray-400">
+                Major Cities
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
