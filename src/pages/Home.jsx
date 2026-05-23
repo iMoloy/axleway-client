@@ -151,13 +151,13 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Link
                 className="rounded-md bg-[var(--accent)] px-8 py-4 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
-                href="/cars"
+                to="/cars"
               >
                 Explore Cars →
               </Link>
               <Link
                 className="rounded-md border border-white bg-white px-8 py-4 text-sm font-bold text-black transition hover:bg-gray-100 hover:scale-105 active:scale-95"
-                href="/add-car"
+                to="/add-car"
               >
                 List Your Car
               </Link>

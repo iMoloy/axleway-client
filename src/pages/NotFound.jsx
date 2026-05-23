@@ -10,7 +10,7 @@ export default function NotFound() {
       <p className="mt-3 max-w-md text-[var(--muted)]">
         The page may be moved, private, or still under development.
       </p>
-      <Link className="primary-button mt-6" href="/">
+      <Link className="primary-button mt-6" to="/">
         Back to Home
       </Link>
     </section>

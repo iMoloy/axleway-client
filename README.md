@@ -1,88 +1,65 @@
-# AxleWay 🚗
+# AxleWay
 
-**Live Site:** [https://axleway.vercel.app](https://axleway.vercel.app)
+Live Site: https://axleway.vercel.app
 
-AxleWay is a premium, full-stack peer-to-peer car sharing marketplace. Built with Next.js, Express, and MongoDB, it connects car owners (hosts) directly with verified renters. The application is styled with a sleek modern design system utilizing a black-accented dark theme, sharp card/button borders, and responsive micro-interactions.
+AxleWay is a full-stack car rental platform where users can explore cars, view details, book vehicles, manage bookings, and maintain owner listings.
 
----
+## Features
 
-## 🌟 Key Features
+- Browse available and unavailable cars with real-time search by name and filter by car type using MongoDB `$regex`.
+- View full car details with daily rent, seats, pickup location, availability status, and booking count.
+- Register and login with Firebase email/password or Google authentication, with inline password validation.
+- Add new car listings with image upload (imgbb), price, type, location, seats, description, and availability.
+- Manage your own listings from My Added Cars — update price, type, location, availability, image, and description via modal; delete with a confirmation modal.
+- Track all your bookings with start/end dates, total price, driver request, and status from My Bookings; cancel any booking with a confirmation step.
+- Protected private routes using JWT stored in HTTPOnly cookies, verified on every private API call.
+- Fully responsive design for mobile, tablet, and desktop screens with dark/light theme toggle.
 
-### 1. User Authentication & Authorization
-* **Secure JWT Login:** Cookie-based session validation using secure HTTP-only cookies.
-* **Social Login:** Firebase Google Sign-In integration.
-* **Security Validation:** Front-end and back-end password complexity validation (min 6 characters, at least one uppercase letter, and one lowercase letter).
+## Tech Stack
 
-### 2. Interactive Fleet Catalog
-* **Search & Filters:** Search cars by keyword (triggered on button submit or Enter) and filter by vehicle type (SUV, Sedan, Hatchback, etc.) or availability status.
-* **Pagination:** Seamless client-side pagination for browsing large fleets.
-* **Real-time Availability:** Shows active status badges (Available / Unavailable) fetched directly from the database.
+- Vite + React
+- React Router DOM
+- Tailwind CSS v4
+- HeroUI
+- Framer Motion
+- React Toastify
+- Firebase Authentication
+- Express.js API
+- MongoDB
 
-### 3. Booking & Booking Management
-* **Flexible Bookings:** Renters can select booking dates, toggle driver requests, and send custom instructions/notes to owners.
-* **My Bookings Dashboard:** Track booking dates, pricing breakdown, driver status, and cancel bookings through confirmation modals.
+## Environment Variables
 
-### 4. Owner Dashboard & Listing Tool (Host Mode)
-* **Add a Vehicle:** Owners can list cars by providing vehicle specifications, pickup location, rent price, and descriptions.
-* **Cloud File Uploads:** Upload car images directly to the cloud via integrated ImgBB file upload API.
-* **My Added Cars:** A complete CRUD interface for managing owned fleet listings, supporting full details updates and listings deletion.
+Create `.env.local` from `.env.example` and fill in real values.
 
-### 5. Premium UI/UX Polish
-* **Black Theme Navbar:** A dark-styled navigation bar optimized for visual hierarchy.
-* **Sharp Modern Accents:** Border-radiuses set to `rounded-md` / `radius="sm"` to project a premium, state-of-the-art dashboard look.
-* **Smooth Footer & Transitions:** Useful Links feature hover-offset transitions with fading direction arrows at the end of the text.
-* **Interactive FAQ Accordion:** Interactive React-state Accordion FAQ blocks on the homepage.
-* **Trust & Safety Row:** Key indicators row displaying Trust badges (Verified Listings, Secure Renting, Direct Notes, Support).
-* **Interactive Light/Dark Mode:** A persistent theme toggling button in the navigation header syncing preferences with local storage and updating custom CSS properties instantly.
-
----
-
-## 🛠️ Tech Stack
-
-* **Frontend:** React, Vite, React Router, Tailwind CSS, HeroUI, React Toastify, Firebase Client SDK
-* **Backend:** Express.js, JSON Web Tokens (JWT), Cookie Parser, CORS
-* **Database:** MongoDB Atlas
-
----
-
-## 🔑 Environment Variables
-
-Create a `.env.local` file inside the `client` directory and populate it with your Firebase and API configurations:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-NEXT_PUBLIC_IMGBB_KEY=your_imgbb_api_key
+```
+VITE_API_URL=http://localhost:5000
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_IMGBB_KEY=your_imgbb_api_key
 ```
 
----
+**On Vercel:** Add these same variables in your Vercel project settings under Environment Variables.
+After deploying the server (e.g. on Render), set `VITE_API_URL` to the live server URL.
 
-## 🚀 Local Development Setup
+## Local Development
 
-To run the client application locally, ensure your backend server is running, and then execute:
-
-```bash
-# 1. Install dependencies
+```
 npm install
-
-# 2. Run the Vite development server
 npm run dev
 ```
 
-The Vite client will start on `http://localhost:3000` (or `http://localhost:3001` if port 3000 is occupied).
+The local client runs on `http://localhost:3000`.
 
----
+## Build
 
-## 📦 Build for Production
-
-To compile the application bundle for production deployment:
-
-```bash
-npm run build
-npm run preview
 ```
+npm run build
+```
+
+## About
+
+AxleWay connects trusted car owners with verified renters.

@@ -264,7 +264,7 @@ export default function Cars() {
                     </div>
                     <Link
                       className="block rounded-md bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
-                      href={`/cars/${car._id || car.id}`}
+                      to={`/cars/${car._id || car.id}`}
                     >
                       View Details
                     </Link>

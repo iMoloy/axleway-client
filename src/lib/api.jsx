@@ -1,4 +1,4 @@
-const apiUrl = import.meta.env.NEXT_PUBLIC_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export async function apiFetch(path, options = {}) {
   if (!apiUrl) {

@@ -93,7 +93,7 @@ export default function AddCar() {
       formData.append("image", file);
 
       const res = await fetch(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.NEXT_PUBLIC_IMGBB_KEY}`,
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`,
         {
           method: "POST",
           body: formData,

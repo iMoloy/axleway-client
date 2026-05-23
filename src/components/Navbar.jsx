@@ -76,7 +76,7 @@ export function Navbar() {
         {/* Logo */}
         <Link
           className="flex items-center gap-0.5 text-2xl font-black tracking-tight"
-          href="/"
+          to="/"
           onClick={closeMenus}
         >
           <span className="text-white">Axle</span>
@@ -88,7 +88,7 @@ export function Navbar() {
           {navLinks.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              to={item.href}
               className={`relative font-bold transition-colors after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[var(--accent)] after:transition-all after:duration-300 hover:text-white hover:after:w-full ${pathname === item.href ? "text-white after:w-full" : "text-white/60"}`}
             >
               {item.label}
@@ -98,7 +98,7 @@ export function Navbar() {
             authNavLinks.map((item) => (
               <Link
                 key={item.href}
-                href={item.href}
+                to={item.href}
                 className={`font-bold transition-all duration-200 ${item.special ? "rounded-md bg-[var(--accent)] px-4 py-2 !text-white hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95" : "relative text-white/60 hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[var(--accent)] after:transition-all after:duration-300 hover:after:w-full"} ${pathname === item.href && !item.special ? "text-white after:w-full" : ""}`}
               >
                 {item.label}
@@ -181,7 +181,7 @@ export function Navbar() {
                       <Link
                         key={item.href}
                         className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white hover:scale-105 active:scale-95"
-                        href={item.href}
+                        to={item.href}
                         onClick={() => setMenuOpen(false)}
                       >
                         {item.label}
@@ -194,7 +194,7 @@ export function Navbar() {
                     <Link
                       key={item.href}
                       className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white hover:scale-105 active:scale-95"
-                      href={item.href}
+                      to={item.href}
                       onClick={() => setMenuOpen(false)}
                     >
                       {item.label}
@@ -250,7 +250,7 @@ export function Navbar() {
               <Link
                 key={item.href}
                 className="rounded-md px-4 py-3 text-white/70 transition-colors hover:bg-white/5 hover:text-white"
-                href={item.href}
+                to={item.href}
                 onClick={closeMenus}
               >
                 {item.label}
@@ -259,7 +259,7 @@ export function Navbar() {
             <div className="mt-2 grid gap-2 border-t border-white/10 pt-4">
               <Link
                 className="primary-button w-full text-center rounded-md"
-                href="/login"
+                to="/login"
                 onClick={closeMenus}
               >
                 Login
@@ -267,7 +267,7 @@ export function Navbar() {
               <Link
                 className="block w-full rounded-md border py-3 text-center text-sm font-bold transition"
                 style={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#09090b" }}
-                href="/register"
+                to="/register"
                 onClick={closeMenus}
               >
                 Register

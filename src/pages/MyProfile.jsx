@@ -40,7 +40,7 @@ export default function MyProfile() {
       formData.append("image", file);
 
       const res = await fetch(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.NEXT_PUBLIC_IMGBB_KEY}`,
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`,
         {
           method: "POST",
           body: formData,
@@ -155,7 +155,7 @@ export default function MyProfile() {
                 </p>
               )}
               <Link
-                href="/my-added-cars"
+                to="/my-added-cars"
                 className="mt-4 text-sm font-bold text-[var(--accent)] hover:underline"
               >
                 Manage your cars &rarr;
@@ -172,7 +172,7 @@ export default function MyProfile() {
                 </p>
               )}
               <Link
-                href="/my-bookings"
+                to="/my-bookings"
                 className="mt-4 text-sm font-bold text-[var(--action)] hover:underline"
               >
                 View booking history &rarr;

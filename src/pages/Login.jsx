@@ -1,16 +1,24 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { toast } from "react-toastify";
 import { syncAuthCookie } from "@/lib/authApi";
 import { auth, googleProvider } from "@/lib/firebase";
+import { useAuth } from "@/providers/AuthProvider";
 
 const inputClass =
   "mt-1.5 h-12 w-full rounded-md border border-[var(--line)] bg-[var(--panel-soft)] px-4 text-sm outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:bg-white focus:ring-2 focus:ring-[var(--accent)]/15";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user && !authLoading) {
+      navigate("/", { replace: true });
+    }
+  }, [user, authLoading, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -112,7 +120,7 @@ export default function Login() {
 
         <p className="mt-6 text-center text-sm text-[var(--muted)]">
           New to AxleWay?{" "}
-          <Link className="font-bold text-[var(--accent)]" href="/register">
+          <Link className="font-bold text-[var(--accent)]" to="/register">
             Create an account
           </Link>
         </p>

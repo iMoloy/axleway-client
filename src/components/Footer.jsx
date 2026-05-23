@@ -16,7 +16,7 @@ export function Footer() {
           </div>
           <Link
             className="inline-block rounded-md bg-[var(--accent)] px-6 py-3 text-center text-xs font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
-            href="/cars"
+            to="/cars"
           >
             Explore Fleet →
           </Link>
@@ -44,7 +44,7 @@ export function Footer() {
               <li>
                 <Link
                   className="group inline-flex items-center transition-all duration-200 hover:text-white"
-                  href="/"
+                  to="/"
                 >
                   Home
                   <span className="ml-1.5 text-[var(--accent)] opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-1">
@@ -55,7 +55,7 @@ export function Footer() {
               <li>
                 <Link
                   className="group inline-flex items-center transition-all duration-200 hover:text-white"
-                  href="/cars"
+                  to="/cars"
                 >
                   Explore Fleet
                   <span className="ml-1.5 text-[var(--accent)] opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-1">
@@ -66,7 +66,7 @@ export function Footer() {
               <li>
                 <Link
                   className="group inline-flex items-center transition-all duration-200 hover:text-white"
-                  href="/add-car"
+                  to="/add-car"
                 >
                   List Your Car
                   <span className="ml-1.5 text-[var(--accent)] opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-1">
@@ -77,7 +77,7 @@ export function Footer() {
               <li>
                 <Link
                   className="group inline-flex items-center transition-all duration-200 hover:text-white"
-                  href="/my-bookings"
+                  to="/my-bookings"
                 >
                   My Bookings
                   <span className="ml-1.5 text-[var(--accent)] opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-1">
