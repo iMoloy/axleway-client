@@ -39,7 +39,7 @@ AxleWay is a premium, full-stack peer-to-peer car sharing marketplace. Built wit
 
 ## 🛠️ Tech Stack
 
-* **Frontend:** Next.js (App Router), React, Tailwind CSS, HeroUI, React Toastify, Firebase Client SDK
+* **Frontend:** React, Vite, React Router, Tailwind CSS, HeroUI, React Toastify, Firebase Client SDK
 * **Backend:** Express.js, JSON Web Tokens (JWT), Cookie Parser, CORS
 * **Database:** MongoDB Atlas
 
@@ -70,11 +70,11 @@ To run the client application locally, ensure your backend server is running, an
 # 1. Install dependencies
 npm install
 
-# 2. Run the Next.js development server
+# 2. Run the Vite development server
 npm run dev
 ```
 
-The Next.js client will start on `http://localhost:3000` (or `http://localhost:3001` if port 3000 is occupied).
+The Vite client will start on `http://localhost:3000` (or `http://localhost:3001` if port 3000 is occupied).
 
 ---
 
@@ -84,5 +84,5 @@ To compile the application bundle for production deployment:
 
 ```bash
 npm run build
-npm start
+npm run preview
 ```
