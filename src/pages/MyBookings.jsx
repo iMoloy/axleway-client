@@ -156,7 +156,7 @@ export default function MyBookings() {
                   <div className="flex gap-2 md:justify-end">
                     <Button
                       as={Link}
-                      href={`/cars/${booking.carId}`}
+                      to={`/cars/${booking.carId}`}
                       size="sm"
                       variant="bordered"
                       radius="sm"
