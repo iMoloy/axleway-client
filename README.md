@@ -43,7 +43,7 @@ VITE_IMGBB_KEY=your_imgbb_api_key
 ```
 
 **On Vercel:** Add these same variables in your Vercel project settings under Environment Variables.
-After deploying the server (e.g. on Render), set `VITE_API_URL` to the live server URL.
+Set `VITE_API_URL` to `/api` so that Vercel uses the reverse proxy defined in `vercel.json` (this solves third-party cookie blocks in Chrome).
 
 ## Local Development
 
