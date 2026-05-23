@@ -218,7 +218,7 @@ export function Navbar() {
               <Button
                 as={Link}
                 color="primary"
-                href="/login"
+                to="/login"
                 className="font-bold rounded-md bg-[var(--accent)] hover:bg-[var(--accent-dark)] !text-white transition hover:scale-105 active:scale-95"
                 size="sm"
                 variant="solid"
@@ -228,7 +228,7 @@ export function Navbar() {
               </Button>
               <Button
                 as={Link}
-                href="/register"
+                to="/register"
                 className="font-bold rounded-md border transition hover:scale-105 active:scale-95"
                 style={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#09090b" }}
                 size="sm"
