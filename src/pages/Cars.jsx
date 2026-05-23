@@ -1,9 +1,5 @@
-"use client";
-
-import Link from "next/link";
-import Image from "next/image";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 
 const ITEMS_PER_PAGE = 6;
@@ -21,9 +17,9 @@ const availabilityOptions = ["All", "Available", "Unavailable"];
 const controlClass =
   "h-12 rounded-md border border-[var(--line)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 
-export default function CarsPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export default function Cars() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   // Initial state comes from URL so shared/bookmarked links work
   const [searchInput, setSearchInput] = useState(
@@ -49,8 +45,8 @@ export default function CarsPage() {
     if (availability !== "All") params.set("availability", availability);
 
     const newUrl = params.toString() ? `?${params.toString()}` : "/cars";
-    router.replace(newUrl, { scroll: false });
-  }, [search, type, availability, router]);
+    navigate(newUrl, { replace: true });
+  }, [search, type, availability, navigate]);
 
   // Search after 500ms of no typing (debounce)
   const handleSearchInput = (event) => {
@@ -227,9 +223,7 @@ export default function CarsPage() {
                 className="group flex flex-col overflow-hidden rounded-lg border border-[var(--line)] bg-white shadow-sm transition hover:shadow-md"
               >
                 <div className="overflow-hidden">
-                  <Image
-                    width={400}
-                    height={300}
+                  <img
                     className="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
                     src={car.image}
                     alt={car.name}

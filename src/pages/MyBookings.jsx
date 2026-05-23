@@ -1,13 +1,11 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
 import { apiFetch } from "@/lib/api";
 
-export default function MyBookingsPage() {
+export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [canceling, setCanceling] = useState(false);
@@ -42,8 +40,6 @@ export default function MyBookingsPage() {
   }, []);
 
   const handleCancel = async () => {
-    const bookingId = cancelBooking?._id || cancelBooking?.id;
-
     if (!cancelBooking?._id) {
       toast.error("Invalid booking selection");
       setCancelBooking(null);

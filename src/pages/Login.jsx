@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { toast } from "react-toastify";
@@ -11,8 +8,8 @@ import { auth, googleProvider } from "@/lib/firebase";
 const inputClass =
   "mt-1.5 h-12 w-full rounded-md border border-[var(--line)] bg-[var(--panel-soft)] px-4 text-sm outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:bg-white focus:ring-2 focus:ring-[var(--accent)]/15";
 
-export default function LoginPage() {
-  const router = useRouter();
+export default function Login() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
@@ -30,7 +27,7 @@ export default function LoginPage() {
       const ok = await syncAuthCookie(result.user);
       if (!ok) toast.warning("Logged in, but server token is not ready yet.");
       else toast.success("Login successful");
-      router.push("/");
+      navigate("/");
     } catch (err) {
       toast.error(err.message || "Login failed");
     } finally {
@@ -46,7 +43,7 @@ export default function LoginPage() {
       const ok = await syncAuthCookie(result.user);
       if (!ok) toast.warning("Logged in, but server token is not ready yet.");
       else toast.success("Google login successful");
-      router.push("/");
+      navigate("/");
     } catch (err) {
       toast.error(err.message || "Google login failed");
     } finally {

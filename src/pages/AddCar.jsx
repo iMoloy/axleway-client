@@ -1,5 +1,3 @@
-"use client";
-
 import { PrivateRoute } from "@/components/PrivateRoute";
 import { Button } from "@heroui/react";
 import { useState } from "react";
@@ -25,7 +23,7 @@ function getTrimmedValue(formData, key) {
   return String(formData.get(key) || "").trim();
 }
 
-export default function AddCarPage() {
+export default function AddCar() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
@@ -95,7 +93,7 @@ export default function AddCarPage() {
       formData.append("image", file);
 
       const res = await fetch(
-        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.NEXT_PUBLIC_IMGBB_KEY}`,
         {
           method: "POST",
           body: formData,

@@ -1,11 +1,6 @@
-"use client";
-
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/providers/AuthProvider";
 
 const navLinks = [
@@ -23,7 +18,7 @@ const dropdownLinks = [{ href: "/my-profile", label: "My Profile" }];
 
 export function Navbar() {
   const { user, logOut } = useAuth();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -31,7 +26,6 @@ export function Navbar() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(savedTheme);
     if (savedTheme === "dark") {
       document.documentElement.classList.add("dark");
@@ -150,9 +144,7 @@ export function Navbar() {
                 <span className="relative inline-block">
                   <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-sm bg-[var(--accent-soft)] text-xs font-black text-[var(--accent)]">
                     {user.photoURL ? (
-                      <Image
-                        width={32}
-                        height={32}
+                      <img
                         className="h-full w-full object-cover"
                         src={user.photoURL}
                         alt={user.displayName || user.email}

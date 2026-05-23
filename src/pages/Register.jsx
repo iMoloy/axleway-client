@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   createUserWithEmailAndPassword,
@@ -24,8 +21,8 @@ function getPasswordError(password) {
   return "";
 }
 
-export default function RegisterPage() {
-  const router = useRouter();
+export default function Register() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [passwordTouched, setPasswordTouched] = useState(false);
@@ -51,7 +48,7 @@ export default function RegisterPage() {
         photoURL: form.photoURL.value,
       });
       toast.success("Registration successful. Please login now.");
-      router.push("/login");
+      navigate("/login");
     } catch (err) {
       toast.error(err.message || "Registration failed");
     } finally {
@@ -67,7 +64,7 @@ export default function RegisterPage() {
       const ok = await syncAuthCookie(result.user);
       if (!ok) toast.warning("Logged in, but server token is not ready yet.");
       else toast.success("Google login successful");
-      router.push("/");
+      navigate("/");
     } catch (err) {
       toast.error(err.message || "Google login failed");
     } finally {

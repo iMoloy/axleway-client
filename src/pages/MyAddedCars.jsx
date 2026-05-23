@@ -1,6 +1,3 @@
-"use client";
-
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
@@ -14,7 +11,7 @@ const textareaClass =
   "mt-2 min-h-28 w-full rounded-md border border-[var(--line)] bg-[var(--panel)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20";
 const labelClass = "block text-sm font-bold text-[var(--foreground)]";
 
-export default function MyAddedCarsPage() {
+export default function MyAddedCars() {
   const { user, loading: authLoading } = useAuth();
   const [ownerCars, setOwnerCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,7 +54,6 @@ export default function MyAddedCarsPage() {
   const handleUpdate = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const carId = editCar?._id || editCar?.id;
 
     const updates = {
       price: Number(formData.get("price")),
@@ -95,8 +91,6 @@ export default function MyAddedCarsPage() {
   };
 
   const handleDelete = async () => {
-    const carId = deleteCar?._id || deleteCar?.id;
-
     if (!deleteCar?._id) {
       toast.error("Invalid car selection");
       setDeleteCar(null);
@@ -152,9 +146,7 @@ export default function MyAddedCarsPage() {
                 key={car._id || car.id}
                 className="grid overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)] shadow-sm sm:grid-cols-[210px_1fr]"
               >
-                <Image
-                  width={300}
-                  height={300}
+                <img
                   className="h-56 w-full object-cover sm:h-full"
                   src={car.image}
                   alt={car.name}

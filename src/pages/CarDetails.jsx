@@ -1,8 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
@@ -27,9 +23,9 @@ function calcDays(start, end) {
   return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
 }
 
-export default function CarDetailsPage() {
-  const params = useParams();
-  const router = useRouter();
+export default function CarDetails() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -44,7 +40,7 @@ export default function CarDetailsPage() {
     async function loadCar() {
       try {
         setLoading(true);
-        const data = await apiFetch(`/cars/${params.id}`);
+        const data = await apiFetch(`/cars/${id}`);
         if (!ignore) {
           setCar(data);
         }
@@ -59,14 +55,14 @@ export default function CarDetailsPage() {
       }
     }
 
-    if (params.id) {
+    if (id) {
       loadCar();
     }
 
     return () => {
       ignore = true;
     };
-  }, [params.id]);
+  }, [id]);
 
   const handleBooking = async (event) => {
     event.preventDefault();
@@ -101,7 +97,7 @@ export default function CarDetailsPage() {
       });
       toast.success("Booking confirmed! Redirecting to your bookings…");
       setBookingOpen(false);
-      setTimeout(() => router.push("/my-bookings"), 1500);
+      setTimeout(() => navigate("/my-bookings"), 1500);
     } catch (error) {
       toast.error(error.message || "Could not create booking");
     } finally {
@@ -142,13 +138,10 @@ export default function CarDetailsPage() {
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_420px]">
         <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-sm">
-          <Image
-            width={1000}
-            height={600}
+          <img
             className="h-[320px] w-full rounded-md object-cover md:h-[520px]"
             src={car.image}
             alt={car.name}
-            priority
           />
         </div>
 

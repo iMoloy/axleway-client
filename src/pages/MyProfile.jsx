@@ -1,14 +1,11 @@
-"use client";
-
 import { PrivateRoute } from "@/components/PrivateRoute";
 import { useAuth } from "@/providers/AuthProvider";
 import { apiFetch } from "@/lib/api";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export default function MyProfilePage() {
+export default function MyProfile() {
   const { user, updateUserProfile } = useAuth();
   const [stats, setStats] = useState({ cars: 0, bookings: 0 });
   const [loading, setLoading] = useState(true);
@@ -43,7 +40,7 @@ export default function MyProfilePage() {
       formData.append("image", file);
 
       const res = await fetch(
-        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.NEXT_PUBLIC_IMGBB_KEY}`,
         {
           method: "POST",
           body: formData,
@@ -117,12 +114,10 @@ export default function MyProfilePage() {
             <div className="flex flex-col items-center text-center">
               <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-[var(--accent-soft)] text-3xl font-black text-[var(--accent-dark)]">
                 {user.photoURL ? (
-                  <Image
-                    width={96}
-                    height={96}
+                  <img
                     className="h-full w-full object-cover"
                     src={user.photoURL}
-                    alt={user.displayName}
+                    alt={user.displayName || ""}
                   />
                 ) : (
                   (user.displayName || user.email || "U")

@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import Image from "next/image";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { AvailableCarsPreview } from "@/components/AvailableCarsPreview";
@@ -66,7 +63,7 @@ const faqs = [
   },
 ];
 
-export default function HomePage() {
+export default function Home() {
   const [openFaq, setOpenFaq] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
