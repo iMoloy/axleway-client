@@ -37,8 +37,6 @@ export default function Cars() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const debounceTimer = useRef(null);
-
   // Keep the URL in sync with current filters
   useEffect(() => {
     const params = new URLSearchParams();
@@ -50,21 +48,14 @@ export default function Cars() {
     router.replace(newUrl, { scroll: false });
   }, [search, type, availability, router]);
 
-  // Search after 500ms of no typing (debounce)
+  // Update input state as typing occurs (no debounce search)
   const handleSearchInput = (event) => {
     const value = event.target.value;
     setSearchInput(value);
-
-    clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      setSearch(value);
-      setCurrentPage(1);
-    }, 500);
   };
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    clearTimeout(debounceTimer.current);
     setSearch(searchInput);
     setCurrentPage(1);
   };
@@ -158,7 +149,6 @@ export default function Cars() {
                 setSearchInput("");
                 setSearch("");
                 setCurrentPage(1);
-                clearTimeout(debounceTimer.current);
               }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--foreground)] transition"
               aria-label="Clear search"
