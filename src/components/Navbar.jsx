@@ -1,4 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "@/providers/AuthProvider";
@@ -18,7 +20,7 @@ const dropdownLinks = [{ href: "/my-profile", label: "My Profile" }];
 
 export function Navbar() {
   const { user, logOut } = useAuth();
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -76,7 +78,7 @@ export function Navbar() {
         {/* Logo */}
         <Link
           className="flex items-center gap-0.5 text-2xl font-black tracking-tight"
-          to="/"
+          href="/"
           onClick={closeMenus}
         >
           <span className="text-white">Axle</span>
@@ -88,7 +90,7 @@ export function Navbar() {
           {navLinks.map((item) => (
             <Link
               key={item.href}
-              to={item.href}
+              href={item.href}
               className={`relative font-bold transition-colors after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[var(--accent)] after:transition-all after:duration-300 hover:text-white hover:after:w-full ${pathname === item.href ? "text-white after:w-full" : "text-white/60"}`}
             >
               {item.label}
@@ -98,7 +100,7 @@ export function Navbar() {
             authNavLinks.map((item) => (
               <Link
                 key={item.href}
-                to={item.href}
+                href={item.href}
                 className={`font-bold transition-all duration-200 ${item.special ? "rounded-md bg-[var(--accent)] px-4 py-2 !text-white hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95" : "relative text-white/60 hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[var(--accent)] after:transition-all after:duration-300 hover:after:w-full"} ${pathname === item.href && !item.special ? "text-white after:w-full" : ""}`}
               >
                 {item.label}
@@ -181,7 +183,7 @@ export function Navbar() {
                       <Link
                         key={item.href}
                         className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white hover:scale-105 active:scale-95"
-                        to={item.href}
+                        href={item.href}
                         onClick={() => setMenuOpen(false)}
                       >
                         {item.label}
@@ -194,7 +196,7 @@ export function Navbar() {
                     <Link
                       key={item.href}
                       className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/5 hover:text-white hover:scale-105 active:scale-95"
-                      to={item.href}
+                      href={item.href}
                       onClick={() => setMenuOpen(false)}
                     >
                       {item.label}
@@ -218,7 +220,7 @@ export function Navbar() {
               <Button
                 as={Link}
                 color="primary"
-                to="/login"
+                href="/login"
                 className="font-bold rounded-md bg-[var(--accent)] hover:bg-[var(--accent-dark)] !text-white transition hover:scale-105 active:scale-95"
                 size="sm"
                 variant="solid"
@@ -228,7 +230,7 @@ export function Navbar() {
               </Button>
               <Button
                 as={Link}
-                to="/register"
+                href="/register"
                 className="font-bold rounded-md border transition hover:scale-105 active:scale-95"
                 style={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#09090b" }}
                 size="sm"
@@ -250,7 +252,7 @@ export function Navbar() {
               <Link
                 key={item.href}
                 className="rounded-md px-4 py-3 text-white/70 transition-colors hover:bg-white/5 hover:text-white"
-                to={item.href}
+                href={item.href}
                 onClick={closeMenus}
               >
                 {item.label}
@@ -259,7 +261,7 @@ export function Navbar() {
             <div className="mt-2 grid gap-2 border-t border-white/10 pt-4">
               <Link
                 className="primary-button w-full text-center rounded-md"
-                to="/login"
+                href="/login"
                 onClick={closeMenus}
               >
                 Login
@@ -267,7 +269,7 @@ export function Navbar() {
               <Link
                 className="block w-full rounded-md border py-3 text-center text-sm font-bold transition"
                 style={{ backgroundColor: "#ffffff", borderColor: "#e4e4e7", color: "#09090b" }}
-                to="/register"
+                href="/register"
                 onClick={closeMenus}
               >
                 Register

@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+"use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 
@@ -43,7 +44,7 @@ export function AvailableCarsPreview() {
             </p>
           </div>
           <Link
-            to="/cars"
+            href="/cars"
             className="text-sm font-bold text-[var(--accent)] hover:underline"
           >
             View all cars →
@@ -92,7 +93,7 @@ export function AvailableCarsPreview() {
                   </div>
                   <Link
                     className="mt-5 rounded-md bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
-                    to={`/cars/${car._id || car.id}`}
+                    href={`/cars/${car._id || car.id}`}
                   >
                     View Details
                   </Link>

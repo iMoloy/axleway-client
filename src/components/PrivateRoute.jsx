@@ -1,16 +1,17 @@
+"use client";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 
 export function PrivateRoute({ children }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user, loading } = useAuth();
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/login", { replace: true });
+      router.replace("/login");
     }
-  }, [loading, navigate, user]);
+  }, [loading, router, user]);
 
   if (loading || !user) {
     return (

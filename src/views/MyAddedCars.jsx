@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import { toast } from "react-toastify";

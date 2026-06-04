@@ -1,5 +1,5 @@
 const apiUrl =
-  import.meta.env.VITE_API_URL || "https://axleway-server.vercel.app";
+  process.env.NEXT_PUBLIC_API_URL || "https://axleway-server.vercel.app";
 
 export async function apiFetch(path, options = {}) {
   if (!apiUrl) {

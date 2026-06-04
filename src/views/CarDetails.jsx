@@ -1,4 +1,6 @@
-import { Link, useParams, useNavigate } from "react-router-dom";
+"use client";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api";
@@ -23,7 +25,7 @@ function calcDays(start, end) {
 
 export default function CarDetails() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user } = useAuth();
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -66,7 +68,7 @@ export default function CarDetails() {
   const handleBookNow = () => {
     if (!user) {
       toast.error("Please login to book a car.");
-      navigate("/login");
+      router.push("/login");
       return;
     }
     setBookingOpen(true);
@@ -105,7 +107,7 @@ export default function CarDetails() {
       });
       toast.success("Booking confirmed! Redirecting to your bookings…");
       setBookingOpen(false);
-      setTimeout(() => navigate("/my-bookings"), 1500);
+      setTimeout(() => router.push("/my-bookings"), 1500);
     } catch (error) {
       toast.error(error.message || "Could not create booking");
     } finally {
@@ -128,7 +130,7 @@ export default function CarDetails() {
         <p className="mt-3 text-[var(--muted)]">
           This listing may be unavailable or still loading from the database.
         </p>
-        <Link className="primary-button mt-6" to="/cars">
+        <Link className="primary-button mt-6" href="/cars">
           Back to Cars
         </Link>
       </section>
@@ -139,7 +141,7 @@ export default function CarDetails() {
     <section className="container py-12 md:py-16">
       <Link
         className="text-sm font-bold text-[var(--accent)] hover:underline"
-        to="/cars"
+        href="/cars"
       >
         ← Back to Explore Cars
       </Link>

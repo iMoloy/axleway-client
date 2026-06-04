@@ -1,4 +1,6 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+"use client";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { apiFetch } from "@/lib/api";
 
@@ -18,8 +20,8 @@ const controlClass =
   "h-12 rounded-md border border-[var(--line)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
 
 export default function Cars() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Initial state comes from URL so shared/bookmarked links work
   const [searchInput, setSearchInput] = useState(
@@ -45,8 +47,8 @@ export default function Cars() {
     if (availability !== "All") params.set("availability", availability);
 
     const newUrl = params.toString() ? `?${params.toString()}` : "/cars";
-    navigate(newUrl, { replace: true });
-  }, [search, type, availability, navigate]);
+    router.replace(newUrl, { scroll: false });
+  }, [search, type, availability, router]);
 
   // Search after 500ms of no typing (debounce)
   const handleSearchInput = (event) => {
@@ -264,7 +266,7 @@ export default function Cars() {
                     </div>
                     <Link
                       className="block rounded-md bg-[var(--accent)] py-2.5 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95"
-                      to={`/cars/${car._id || car.id}`}
+                      href={`/cars/${car._id || car.id}`}
                     >
                       View Details
                     </Link>

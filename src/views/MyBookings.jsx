@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+"use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
@@ -156,7 +157,7 @@ export default function MyBookings() {
                   <div className="flex gap-2 md:justify-end">
                     <Button
                       as={Link}
-                      to={`/cars/${booking.carId}`}
+                      href={`/cars/${booking.carId}`}
                       size="sm"
                       variant="bordered"
                       radius="sm"

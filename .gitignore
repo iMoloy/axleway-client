@@ -2,8 +2,10 @@ node_modules
 .env
 .env.*
 !.env.example
+
+# Next.js
+.next
 out
 
+# Vercel
 .vercel
-dist
-dist/

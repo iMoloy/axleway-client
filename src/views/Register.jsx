@@ -1,6 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+"use client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
 import { toast } from "react-toastify";
 import { syncAuthCookie } from "@/lib/authApi";
 import { auth, googleProvider } from "@/lib/firebase";
@@ -9,35 +15,52 @@ import { useAuth } from "@/providers/AuthProvider";
 const inputClass =
   "mt-1.5 h-12 w-full rounded-md border border-[var(--line)] bg-[var(--panel-soft)] px-4 text-sm outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:bg-white focus:ring-2 focus:ring-[var(--accent)]/15";
 
-export default function Login() {
-  const navigate = useNavigate();
+function getPasswordError(password) {
+  if (password.length < 6) return "Password must be at least 6 characters.";
+  if (!/[A-Z]/.test(password))
+    return "Password must have one uppercase letter.";
+  if (!/[a-z]/.test(password))
+    return "Password must have one lowercase letter.";
+  return "";
+}
+
+export default function Register() {
+  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   useEffect(() => {
     if (user && !authLoading) {
-      navigate("/", { replace: true });
+      router.replace("/");
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, router]);
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (!auth) return toast.error("Firebase configuration is missing.");
 
     const form = e.currentTarget;
+    const password = form.password.value;
+    const error = getPasswordError(password);
+    if (error) return setPasswordError(error);
+
     try {
       setLoading(true);
-      const result = await signInWithEmailAndPassword(
+      const result = await createUserWithEmailAndPassword(
         auth,
         form.email.value,
-        form.password.value,
+        password,
       );
-      const ok = await syncAuthCookie(result.user);
-      if (!ok) toast.warning("Logged in, but server token is not ready yet.");
-      else toast.success("Login successful");
-      navigate("/");
+      await updateProfile(result.user, {
+        displayName: form.name.value,
+        photoURL: form.photoURL.value,
+      });
+      toast.success("Registration successful. Please login now.");
+      router.push("/login");
     } catch (err) {
-      toast.error(err.message || "Login failed");
+      toast.error(err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -51,7 +74,7 @@ export default function Login() {
       const ok = await syncAuthCookie(result.user);
       if (!ok) toast.warning("Logged in, but server token is not ready yet.");
       else toast.success("Google login successful");
-      navigate("/");
+      router.push("/");
     } catch (err) {
       toast.error(err.message || "Google login failed");
     } finally {
@@ -63,9 +86,9 @@ export default function Login() {
     <section className="container flex min-h-[80vh] items-center justify-center py-12">
       <div className="w-full max-w-md rounded-lg border border-[var(--line)] bg-white p-8 shadow-lg">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-black">Welcome back</h1>
+          <h1 className="text-2xl font-black">Create your account</h1>
           <p className="mt-1 text-sm text-[var(--muted)]">
-            Login to your AxleWay account
+            Join AxleWay and start renting today
           </p>
         </div>
 
@@ -81,12 +104,23 @@ export default function Login() {
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-[var(--line)]" />
           <span className="text-xs text-[var(--muted)]">
-            or sign in with email
+            or register with email
           </span>
           <div className="h-px flex-1 bg-[var(--line)]" />
         </div>
 
-        <form className="space-y-4" onSubmit={handleLogin}>
+        <form className="space-y-4" onSubmit={handleRegister}>
+          <label className="block text-sm font-bold">
+            Full Name
+            <input
+              required
+              autoComplete="name"
+              className={inputClass}
+              name="name"
+              placeholder="Your full name"
+              type="text"
+            />
+          </label>
           <label className="block text-sm font-bold">
             Email
             <input
@@ -99,29 +133,51 @@ export default function Login() {
             />
           </label>
           <label className="block text-sm font-bold">
+            Photo URL{" "}
+            <span className="font-normal text-[var(--muted)]">(optional)</span>
+            <input
+              autoComplete="url"
+              className={inputClass}
+              name="photoURL"
+              placeholder="https://example.com/photo.jpg"
+              type="url"
+            />
+          </label>
+          <label className="block text-sm font-bold">
             Password
             <input
               required
-              autoComplete="current-password"
-              className={inputClass}
+              autoComplete="new-password"
               name="password"
-              placeholder="Enter your password"
+              placeholder="Min 6 chars, uppercase & lowercase"
               type="password"
+              className={`${inputClass} ${passwordTouched && passwordError ? "border-red-400 bg-red-50 focus:border-red-400 focus:ring-red-400/20" : ""}`}
+              onBlur={() => setPasswordTouched(true)}
+              onChange={(e) => {
+                setPasswordTouched(true);
+                setPasswordError(getPasswordError(e.target.value));
+              }}
             />
+            {passwordTouched && passwordError && (
+              <span className="mt-1 block text-xs font-semibold text-red-500">
+                {passwordError}
+              </span>
+            )}
           </label>
+
           <button
             type="submit"
             disabled={loading}
             className="w-full rounded-md bg-[var(--accent)] py-3 text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95 disabled:opacity-60"
           >
-            {loading ? "Signing in…" : "Login"}
+            {loading ? "Creating account…" : "Create Account"}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-[var(--muted)]">
-          New to AxleWay?{" "}
-          <Link className="font-bold text-[var(--accent)]" to="/register">
-            Create an account
+          Already have an account?{" "}
+          <Link className="font-bold text-[var(--accent)]" href="/login">
+            Login
           </Link>
         </p>
       </div>
