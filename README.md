@@ -6,26 +6,24 @@ AxleWay is a full-stack car rental platform where users can explore cars, view d
 
 ## Features
 
-- Browse available and unavailable cars with real-time search by name and filter by car type using MongoDB `$regex`.
-- View full car details with daily rent, seats, pickup location, availability status, and booking count.
-- Register and login with Firebase email/password or Google authentication, with inline password validation.
-- Add new car listings with image upload (imgbb), price, type, location, seats, description, and availability.
-- Manage your own listings from My Added Cars — update price, type, location, availability, image, and description via modal; delete with a confirmation modal.
-- Track all your bookings with start/end dates, total price, driver request, and status from My Bookings; cancel any booking with a confirmation step.
-- Protected private routes using JWT stored in HTTPOnly cookies, verified on every private API call.
-- Fully responsive design for mobile, tablet, and desktop screens with dark/light theme toggle.
+- **Stripe Payment Checkout**: Secure card checkout using `@stripe/react-stripe-js` with security deposit hold.
+- **Double-Booking Prevention**: Real-time date conflict warnings and disabled booking buttons when selected dates overlap with existing reservations.
+- **Interactive Pickup Map**: Embedded Leaflet & OpenStreetMap location maps displaying vehicle pickup spots.
+- **PDF Invoice Download**: 1-click branded PDF invoice generation using `jsPDF` for rental history.
+- **Real-time Search & Filtering**: Explore available cars with live search and filter by type using MongoDB queries.
+- **Firebase Auth & JWT Protection**: Secure Google OAuth & Email/Password signin with HTTPOnly cookie verification.
+- **Self-Service Owner Garage**: Add, edit, and delete car listings with ImgBB cloud photo uploads.
 
 ## Tech Stack
 
 - **Next.js 15** (App Router)
 - **React 19**
 - **Tailwind CSS v4**
-- **HeroUI**
-- **Framer Motion**
-- **React Toastify**
+- **Stripe React SDK** (`@stripe/stripe-js`)
+- **Leaflet & OpenStreetMap**
+- **jsPDF Invoice Engine**
+- **HeroUI & Framer Motion**
 - **Firebase Authentication**
-- **Express.js API**
-- **MongoDB**
 
 ## Project Structure
 
