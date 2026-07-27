@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/providers/AuthProvider";
+import { StripeCheckoutModal } from "@/components/StripeCheckoutModal";
 
 const inputClass =
   "mt-2 h-12 w-full rounded-md border border-[var(--line)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
@@ -35,6 +36,8 @@ export default function CarDetails() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [bookedDates, setBookedDates] = useState([]);
+  const [stripeModalOpen, setStripeModalOpen] = useState(false);
+  const [pendingBooking, setPendingBooking] = useState(null);
 
   useEffect(() => {
     let ignore = false;
@@ -92,7 +95,7 @@ export default function CarDetails() {
       return toast.error("End date must be after the start date.");
     }
 
-    const booking = {
+    const bookingPayload = {
       carId: car._id || car.id,
       carName: car.name,
       carType: car.type,
@@ -104,17 +107,33 @@ export default function CarDetails() {
       note: formData.get("note"),
     };
 
+    setPendingBooking(bookingPayload);
+    setBookingOpen(false);
+    setStripeModalOpen(true);
+  };
+
+  const handlePaymentSuccess = async ({ paymentId }) => {
+    if (!pendingBooking) return;
+
     try {
       setBookingLoading(true);
+      const finalBooking = {
+        ...pendingBooking,
+        paymentStatus: "Paid",
+        paymentId: paymentId || `pay_${Date.now()}`
+      };
+
       await apiFetch("/bookings", {
         method: "POST",
-        body: JSON.stringify(booking),
+        body: JSON.stringify(finalBooking),
       });
-      toast.success("Booking confirmed! Redirecting to your bookings…");
-      setBookingOpen(false);
+
+      toast.success("Payment & Booking Confirmed! Redirecting…");
+      setStripeModalOpen(false);
+      setPendingBooking(null);
       setTimeout(() => router.push("/my-bookings"), 1500);
     } catch (error) {
-      toast.error(error.message || "Could not create booking");
+      toast.error(error.message || "Could not complete booking after payment");
     } finally {
       setBookingLoading(false);
     }
@@ -314,6 +333,19 @@ export default function CarDetails() {
             </div>
           </form>
         </div>
+      )}
+
+      {pendingBooking && (
+        <StripeCheckoutModal
+          isOpen={stripeModalOpen}
+          amount={pendingBooking.totalPrice}
+          carName={pendingBooking.carName}
+          onSuccess={handlePaymentSuccess}
+          onClose={() => {
+            setStripeModalOpen(false);
+            setBookingOpen(true);
+          }}
+        />
       )}
     </section>
   );
