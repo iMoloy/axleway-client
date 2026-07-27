@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/providers/AuthProvider";
 import { StripeCheckoutModal } from "@/components/StripeCheckoutModal";
+import { LocationMap } from "@/components/LocationMap";
 
 const inputClass =
   "mt-2 h-12 w-full rounded-md border border-[var(--line)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15";
@@ -171,12 +172,16 @@ export default function CarDetails() {
       </Link>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_420px]">
-        <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-sm">
-          <img
-            className="h-[320px] w-full rounded-md object-cover md:h-[520px]"
-            src={car.image}
-            alt={car.name}
-          />
+        <div className="space-y-6">
+          <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-white p-2 shadow-sm">
+            <img
+              className="h-[320px] w-full rounded-md object-cover md:h-[480px]"
+              src={car.image}
+              alt={car.name}
+            />
+          </div>
+
+          <LocationMap locationName={car.location} />
         </div>
 
         <aside className="rounded-lg border border-[var(--line)] bg-white p-6 shadow-sm flex flex-col justify-between">
