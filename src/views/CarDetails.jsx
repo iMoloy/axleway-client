@@ -34,6 +34,7 @@ export default function CarDetails() {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [bookedDates, setBookedDates] = useState([]);
 
   useEffect(() => {
     let ignore = false;
@@ -41,9 +42,13 @@ export default function CarDetails() {
     async function loadCar() {
       try {
         setLoading(true);
-        const data = await apiFetch(`/cars/${id}`);
+        const [data, bookingsData] = await Promise.all([
+          apiFetch(`/cars/${id}`),
+          apiFetch(`/bookings/car/${id}`).catch(() => [])
+        ]);
         if (!ignore) {
           setCar(data);
+          setBookedDates(bookingsData || []);
         }
       } catch {
         if (!ignore) {
@@ -213,6 +218,17 @@ export default function CarDetails() {
             </div>
 
             <div className="mt-6 space-y-5">
+              {bookedDates.length > 0 && (
+                <div className="rounded-md bg-[var(--panel-soft)] p-3 text-xs text-[var(--muted)]">
+                  <span className="font-bold text-[var(--foreground)]">⚠️ Unavailable Dates: </span>
+                  {bookedDates.map((b, i) => (
+                    <span key={i} className="inline-block rounded bg-[var(--card)] px-1.5 py-0.5 font-mono text-[var(--foreground)] mx-1">
+                      {b.startDate} to {b.endDate}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-4">
                 <label className={labelClass}>
                   Start Date
@@ -242,6 +258,12 @@ export default function CarDetails() {
                   />
                 </label>
               </div>
+
+              {startDate && endDate && bookedDates.some((b) => startDate <= b.endDate && endDate >= b.startDate) && (
+                <div className="rounded-md border border-red-500/30 bg-red-500/10 p-3 text-xs font-semibold text-red-500">
+                  ⚠️ Date Conflict: This vehicle is already reserved for the selected date range.
+                </div>
+              )}
 
               <label className={labelClass}>
                 Driver Needed
@@ -284,7 +306,7 @@ export default function CarDetails() {
 
               <button
                 type="submit"
-                disabled={bookingLoading}
+                disabled={bookingLoading || (startDate && endDate && bookedDates.some((b) => startDate <= b.endDate && endDate >= b.startDate))}
                 className="w-full rounded-md bg-[var(--accent)] py-3 text-center text-sm font-bold !text-white transition hover:bg-[var(--accent-dark)] hover:scale-105 active:scale-95 disabled:opacity-60 disabled:hover:scale-100"
               >
                 {bookingLoading ? "Confirming…" : "Confirm Booking"}

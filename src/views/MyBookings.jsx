@@ -5,6 +5,7 @@ import { Button } from "@heroui/react";
 import { toast } from "react-toastify";
 import { PrivateRoute } from "@/components/PrivateRoute";
 import { apiFetch } from "@/lib/api";
+import { generateBookingPDF } from "@/lib/pdfInvoice";
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
@@ -154,7 +155,16 @@ export default function MyBookings() {
                     <p className="font-bold">{booking.driverNeeded}</p>
                   </div>
 
-                  <div className="flex gap-2 md:justify-end">
+                  <div className="flex flex-wrap gap-2 md:justify-end">
+                    <Button
+                      size="sm"
+                      variant="solid"
+                      className="bg-[var(--accent)] text-white font-bold"
+                      radius="sm"
+                      onPress={() => generateBookingPDF(booking)}
+                    >
+                      📄 Invoice
+                    </Button>
                     <Button
                       as={Link}
                       href={`/cars/${booking.carId}`}
