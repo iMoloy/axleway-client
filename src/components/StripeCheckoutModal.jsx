@@ -74,19 +74,20 @@ function CheckoutForm({ amount, onSuccess, onCancel }) {
         <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)] mb-3">
           Card Details & Security Deposit Hold
         </label>
-        <div className="rounded-md border border-[var(--line)] bg-white p-3.5 text-slate-800">
+        <div className="rounded-md border border-[var(--line)] bg-slate-900 p-3.5 text-white shadow-inner">
           <CardElement
             options={{
               style: {
                 base: {
                   fontSize: "15px",
-                  color: "#1e293b",
+                  color: "#ffffff",
+                  fontFamily: "Inter, sans-serif",
                   "::placeholder": {
                     color: "#94a3b8",
                   },
                 },
                 invalid: {
-                  color: "#ef4444",
+                  color: "#f87171",
                 },
               },
             }}
